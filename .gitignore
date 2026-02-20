@@ -1,0 +1,10 @@
+# Ignore IntelliJ project files
+.idea/
+*.iml
+
+# Ignore build outputs
+out/
+target/
+
+# Ignore logs
+*.log
