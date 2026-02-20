@@ -2,9 +2,9 @@ package Auth;
 
 import java.util.Scanner;
 import Admin.AdminDashboard;
-import User.Member;
-import User.MemberDashboard;
-import User.MemberRepo;
+import Member.Member;
+import Member.MemberDashboard;
+import Member.MemberRepo;
 import java.util.ArrayList;
 
 public class LoginSystem {
@@ -14,10 +14,11 @@ public class LoginSystem {
     public String authenticateUser(){
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter username: ");
+        System.out.println("🔐 Please Login to Continue\n");
+        System.out.print("👤 Username: ");
         String userName = sc.next();
 
-        System.out.print("Enter password: ");
+        System.out.print("🔑 Password: ");
         String password = sc.next();
 
         Admin adminCred = new CredRepo().deserialize();
@@ -29,7 +30,7 @@ public class LoginSystem {
             }
             for (Member mem: membersCred){
                 Member currMember = mem;
-                if (currMember.username.equals(userName) && currMember.getPassword().equals(password)){
+                if (currMember.getUsername().equals(userName) && currMember.getPassword().equals(password)){
                     loggedInMember = currMember;
                     return "member";
                 }
@@ -41,10 +42,12 @@ public class LoginSystem {
     public void openDashboard(String role){
         switch (role){
             case "admin":
+                System.out.println("🛠 Logged in as Admin\n");
                 new AdminDashboard().start();
                 break;
 
             case "member":
+                System.out.println("👤 Logged in as Member\n");
                 new MemberDashboard().start(loggedInMember);
                 break;
 
@@ -54,11 +57,15 @@ public class LoginSystem {
     }
 
     public void start() {
-        String role = authenticateUser();
-        if (!role.equals("invalid")){
-            openDashboard(role);
-        } else {
-            System.out.println("Invalid credentials");
+        while (true){
+            String role = authenticateUser();
+            if (!role.equals("invalid")){
+                openDashboard(role);
+                break;
+            } else {
+                System.out.println("❌ Invalid username or password.\n");
+            }
         }
+
     }
 }

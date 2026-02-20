@@ -6,9 +6,11 @@ public class CredRepo {
 
     Admin adminCredentials = null;
 
+    private static final String FILE_PATH = "Auth/Credentials.ser";
+
     public void serialize(Admin admin){
         try{
-            FileOutputStream fos = new FileOutputStream("Auth/Credentials.ser");
+            FileOutputStream fos = new FileOutputStream(FILE_PATH);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             oos.writeObject(admin);
@@ -23,7 +25,7 @@ public class CredRepo {
 
     public Admin deserialize(){
         try {
-            FileInputStream fis = new FileInputStream("Auth/Credentials.ser");
+            FileInputStream fis = new FileInputStream(FILE_PATH);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
             adminCredentials = (Admin) ois.readObject();
