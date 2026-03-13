@@ -1,3 +1,5 @@
+package main;
+
 import login.LoginDashboard;
 
 public class LandingPage {
