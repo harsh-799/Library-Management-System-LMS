@@ -4,8 +4,6 @@ import java.util.Scanner;
 import Admin.AdminDashboard;
 import Member.Member;
 import Member.MemberDashboard;
-import Member.MemberRepo;
-import java.util.ArrayList;
 
 public class LoginSystem {
 
@@ -21,21 +19,6 @@ public class LoginSystem {
         System.out.print("🔑 Password: ");
         String password = sc.next();
 
-        Admin adminCred = new CredRepo().deserialize();
-        ArrayList<Member> membersCred = new MemberRepo().deserialize();
-
-        if (adminCred != null){
-            if (adminCred.getUsername().equals(userName) && adminCred.getPassword().equals(password)){
-                return "admin";
-            }
-            for (Member mem: membersCred){
-                Member currMember = mem;
-                if (currMember.getUsername().equals(userName) && currMember.getPassword().equals(password)){
-                    loggedInMember = currMember;
-                    return "member";
-                }
-            }
-        }
         return "invalid";
     }
 

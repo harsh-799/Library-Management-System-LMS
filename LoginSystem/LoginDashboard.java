@@ -4,17 +4,9 @@ import java.io.*;
 import java.util.Scanner;
 
 import Auth.Admin;
-import Auth.CredRepo;
 import Auth.LoginSystem;
 
 public class LoginDashboard {
-
-    private static final String FILE_PATH = "Auth/Credentials.ser";
-
-    public boolean adminExists(){
-        File admin = new File(FILE_PATH);
-        return admin.exists();
-    }
 
     public Admin createAdmin(){
         Scanner sc = new Scanner(System.in);
@@ -35,11 +27,6 @@ public class LoginDashboard {
         System.out.println("\n=======================================");
         System.out.println("📚  LIBRARY MANAGEMENT SYSTEM  📚");
         System.out.println("=======================================\n");
-
-        if (!adminExists()){
-            Admin adminCredentials = createAdmin();
-            new CredRepo().serialize(adminCredentials);
-        }
 
         new LoginSystem().start();
     }
