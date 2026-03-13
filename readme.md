@@ -9,13 +9,13 @@ This project simulates real-world backend logic including authentication, role-b
 ## 🚀 Features
 
 ### 🔐 Authentication System
-- Admin account auto-creation (if not exists)
-- Role-based login (Admin / Member)
+- admin account auto-creation (if not exists)
+- Role-based login (admin / member)
 - Credential verification using serialized storage
 
 ---
 
-### 🛠 Admin Dashboard
+### 🛠 admin Dashboard
 - Create new members
 - Delete members
 - View all members
@@ -27,7 +27,7 @@ This project simulates real-world backend logic including authentication, role-b
 
 ---
 
-### 👤 Member Dashboard
+### 👤 member Dashboard
 - View available books
 - Search books by:
     - Book ID
@@ -61,13 +61,13 @@ This project simulates real-world backend logic including authentication, role-b
 
 ---
 
-### 🛠 Admin Dashboard
-![Admin Dashboard](assets/screenshots/adminDashboard.png)
+### 🛠 admin Dashboard
+![admin Dashboard](assets/screenshots/adminDashboard.png)
 
 ---
 
-### 👤 Member Dashboard
-![Member Dashboard](assets/screenshots/memberDashboard.png)
+### 👤 member Dashboard
+![member Dashboard](assets/screenshots/memberDashboard.png)
 
 ---
 
@@ -91,26 +91,26 @@ LibraryManagementSystem/
 │
 ├── LandingPage.java
 │
-├── LoginSystem/
+├── login/
 │   ├── LoginDashboard.java
-│   └── LoginSystem.java
+│   └── login.java
 │
-├── Admin/
+├── admin/
 │   └── AdminDashboard.java
 │
-├── Member/
-│   ├── Member.java
+├── member/
+│   ├── member.java
 │   ├── MemberDashboard.java
 │   ├── MemberOperations.java
 │   └── MemberRepo.java
 │
-├── Books/
+├── books/
 │   ├── Book.java
 │   ├── BookOperations.java
 │   └── BookRepo.java
 │
-└── Auth/
-    ├── Admin.java
+└── auth/
+    ├── admin.java
     └── CredRepo.java
 ```
 
@@ -121,9 +121,9 @@ LibraryManagementSystem/
 
 This system uses Java Serialization to store:
 
-- Admin credentials → `Credentials.ser`
+- admin credentials → `Credentials.ser`
 - Members data → `MemberData.ser`
-- Books data → `BooksData.ser`
+- books data → `BooksData.ser`
 
 All data persists between application runs.
 

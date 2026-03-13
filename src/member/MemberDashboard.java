@@ -1,12 +1,12 @@
-package Member;
+package member;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.ListIterator;
 import java.util.Scanner;
-import Books.BookOperations;
-import Books.Book;
+import books.BookOperations;
+import books.Book;
 
 public class MemberDashboard {
 

@@ -1,12 +1,12 @@
-package Admin;
+package admin;
 
 import java.time.LocalTime;
 import java.util.Scanner;
 
-import Books.Book;
-import Books.BookOperations;
-import Member.Member;
-import Member.MemberOperations;
+import books.Book;
+import books.BookOperations;
+import member.Member;
+import member.MemberOperations;
 
 public class AdminDashboard {
 

@@ -1,11 +1,11 @@
-package Auth;
+package auth;
 
 import java.util.Scanner;
-import Admin.AdminDashboard;
-import Member.Member;
-import Member.MemberDashboard;
+import admin.AdminDashboard;
+import member.Member;
+import member.MemberDashboard;
 
-public class LoginSystem {
+public class AuthService {
 
     Member loggedInMember;
 

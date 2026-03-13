@@ -8,8 +8,3 @@ target/
 
 # Ignore logs
 *.log
-
-#Ignore Serialized Files
-Member/MemberData.ser
-Auth/Credentials.ser
-Books/BooksData.ser

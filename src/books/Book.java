@@ -1,4 +1,4 @@
-package Books;
+package books;
 
 import java.io.Serializable;
 

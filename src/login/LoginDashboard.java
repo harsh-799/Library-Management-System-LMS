@@ -1,10 +1,9 @@
-package LoginSystem;
+package login;
 
-import java.io.*;
 import java.util.Scanner;
 
-import Auth.Admin;
-import Auth.LoginSystem;
+import admin.Admin;
+import auth.AuthService;
 
 public class LoginDashboard {
 
@@ -28,6 +27,6 @@ public class LoginDashboard {
         System.out.println("📚  LIBRARY MANAGEMENT SYSTEM  📚");
         System.out.println("=======================================\n");
 
-        new LoginSystem().start();
+        new AuthService().start();
     }
 }

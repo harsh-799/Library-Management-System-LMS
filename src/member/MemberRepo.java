@@ -1,11 +1,11 @@
-package Member;
+package member;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class MemberRepo {
 
-    private static final String FILE_PATH = "Member/MemberData.ser";
+    private static final String FILE_PATH = "member/MemberData.ser";
 
     public void serialize(ArrayList<Member> members){
         try {

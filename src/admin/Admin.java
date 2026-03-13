@@ -1,4 +1,4 @@
-package Auth;
+package admin;
 
 import java.io.Serializable;
 

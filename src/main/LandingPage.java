@@ -1,4 +1,4 @@
-import LoginSystem.LoginDashboard;
+import login.LoginDashboard;
 
 public class LandingPage {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package Member;
+package member;
 
 import java.util.ArrayList;
 import java.util.ListIterator;

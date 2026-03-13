@@ -1,4 +1,4 @@
-package Member;
+package member;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class Member implements Serializable{
         this.username = username;
         this.password = password;
         this.memberId = generateId();
-        this.role = "Member";
+        this.role = "member";
         this.totalBooksIssued = 0;
         this.issuedBookIds = new ArrayList<>();
     }

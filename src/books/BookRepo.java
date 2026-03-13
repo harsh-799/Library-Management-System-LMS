@@ -1,11 +1,11 @@
-package Books;
+package books;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class BookRepo {
 
-    private static final String FILE_PATH = "Books/BooksData.ser";
+    private static final String FILE_PATH = "books/BooksData.ser";
 
     public void serializeData(ArrayList<Book> bookList){
         try {
