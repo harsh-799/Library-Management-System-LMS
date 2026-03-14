@@ -116,19 +116,24 @@ public class MemberRepo {
     public Member updateMemberOnLogin(Member member){
         try (
                 Connection conn = DatabaseConnection.connectDB();
-                Statement stmt = conn.createStatement()
+                PreparedStatement ps = conn.prepareStatement("SELECT mt.Fullname, COUNT(bi.Member_ID) " +
+                        "AS Book_Issued " +
+                        "FROM member_table mt LEFT JOIN book_issued bi " +
+                        "ON mt.Member_ID = bi.Member_ID " +
+                        "WHERE mt.Member_ID = ? " +
+                        "GROUP BY mt.Fullname")
         ) {
-            ResultSet rs = stmt.executeQuery("SELECT mt.Fullname, COUNT(bi.Member_ID) " +
-                    "AS Book_Issued " +
-                    "FROM member_table mt LEFT JOIN book_issued bi " +
-                    "ON mt.Member_ID = bi.Member_ID " +
-                    "GROUP BY mt.Fullname");
+            ps.setLong(1, member.getMemberId());
 
-            rs.next();
-            member.setFullName(rs.getString("Fullname"));
-            member.setTotalBooksIssued(rs.getInt("Book_Issued"));
-            return member;
-        }catch (SQLException e){
+            try (
+                    ResultSet rs = ps.executeQuery();
+            ) {
+                rs.next();
+                member.setFullName(rs.getString("Fullname"));
+                member.setTotalBooksIssued(rs.getInt("Book_Issued"));
+                return member;
+            }
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
