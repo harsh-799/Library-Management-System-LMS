@@ -66,7 +66,7 @@ public class BookRepo {
         return null;
     }
 
-    public Boolean fetchAllBooks(){
+    public Boolean fetchAllBooks(String role){
         boolean hasBook = false;
         try (
                 Connection conn = DatabaseConnection.connectDB();
@@ -74,8 +74,13 @@ public class BookRepo {
                 ResultSet rs = stmt.executeQuery("SELECT * FROM book_table");
         ) {
             while (rs.next()){
-                dashboardUi.bookDetailsPrinterAdmin(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_Qty"), rs.getInt("Avail_Qty"));
-                hasBook = true;
+                if (role.equals("admin")){
+                    dashboardUi.bookDetailsPrinterAdmin(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_Qty"), rs.getInt("Avail_Qty"));
+                } else {
+                    dashboardUi.bookDetailsPrinterMember(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_Qty"), rs.getInt("Avail_Qty"));
+                }
+
+                return true;
             }
         }catch (SQLException e){
             System.out.println(e);

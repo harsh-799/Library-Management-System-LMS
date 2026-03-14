@@ -39,7 +39,7 @@ public class AuthService {
         switch (role){
             case "admin":
                 System.out.println("🛠 Logged in as Admin\n");
-                new AdminDashboard().start();
+                new AdminDashboard().start(loggedInAdmin);
                 break;
 
             case "member":

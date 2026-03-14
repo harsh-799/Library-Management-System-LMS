@@ -13,6 +13,7 @@ public class AdminDashboard {
     private final MemberOperations memberOperations = new MemberOperations();
     private final BookOperations bookOperations = new BookOperations();
     private final Scanner sc = new Scanner(System.in);
+    private Admin admin;
 
     public String getGreeting(){
         LocalTime lt = LocalTime.now();
@@ -107,7 +108,7 @@ public class AdminDashboard {
                 break;
 
             case 7:
-                bookOperations.viewAllBooks();
+                bookOperations.viewAllBooks(admin.getRole());
                 break;
 
             case 8:
@@ -120,7 +121,8 @@ public class AdminDashboard {
         return false;
     }
 
-    public void start() {
+    public void start(Admin admin) {
+        this.admin = admin;
         String greeting = getGreeting();
 
         if (greeting.equals("It's Closed")){

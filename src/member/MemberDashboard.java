@@ -136,7 +136,7 @@ public class MemberDashboard {
         switch (choices){
             case 1:
                 System.out.println("Below are the Available books in library: ");
-                // bookOperations.viewAllBooksUser();
+                bookOperations.viewAllBooks(member.getRole());
                 break;
 
             case 2:

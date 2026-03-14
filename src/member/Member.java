@@ -6,7 +6,7 @@ public class Member{
     private String fullName;
     private String username;
     private String password;
-    private String role;
+    private final String role = "member";
     private int totalBooksIssued;
 
     public Member() {
@@ -65,7 +65,6 @@ public class Member{
         this.username = username;
         this.password = password;
         this.memberId = generateId();
-        this.role = "member";
         this.totalBooksIssued = 0;
     }
 }

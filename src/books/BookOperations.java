@@ -32,8 +32,8 @@ public class BookOperations {
         return null;
     }
 
-    public void viewAllBooks(){
-        if (!repo.fetchAllBooks()){
+    public void viewAllBooks(String role){
+        if (!repo.fetchAllBooks(role)){
             System.out.println("📚 Library is empty — no books found ❌");
         }
     }
