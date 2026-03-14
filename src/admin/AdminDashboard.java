@@ -103,18 +103,11 @@ public class AdminDashboard {
             case 6:
                 System.out.print("Enter BookID to be Removed: ");
                 int bookId1 = sc.nextInt();
-                Book removedBook = bookOperations.removeBook(bookId1);
-                if (removedBook != null){
-                    System.out.println("🗑 Book removed successfully.");
-                    System.out.println("Removed Book Details are: ");
-                    System.out.println("BookID: "+removedBook.getBookId());
-                    System.out.println("Title: "+removedBook.getTitle());
-                    System.out.println("Author: "+removedBook.getAuthor());
-                }
+                bookOperations.removeBook(bookId1);
                 break;
 
             case 7:
-                bookOperations.viewAllBooksAdmin();
+                bookOperations.viewAllBooks();
                 break;
 
             case 8:

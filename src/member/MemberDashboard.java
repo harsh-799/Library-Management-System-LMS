@@ -60,10 +60,7 @@ public class MemberDashboard {
                 System.out.print("Enter the BookID: ");
                 try {
                     int bookId = sc.nextInt();
-                    Book res = bookOperations.searchBook(bookId);
-                    if (res != null){
-                        resultPrinter(res);
-                    }
+                    bookOperations.searchBook(bookId);
                 } catch (InputMismatchException e){
                     System.out.println("Invalid input");
                 }
@@ -139,7 +136,7 @@ public class MemberDashboard {
         switch (choices){
             case 1:
                 System.out.println("Below are the Available books in library: ");
-                bookOperations.viewAllBooksUser();
+                // bookOperations.viewAllBooksUser();
                 break;
 
             case 2:
@@ -198,8 +195,8 @@ public class MemberDashboard {
                     ListIterator<Integer> it = issuedBook.listIterator();
                     while (it.hasNext()){
                         Integer issuedBookId = it.next();
-                        Book book = bookOperations.searchBook(issuedBookId);
-                        issuesPrinter(book);
+                        bookOperations.searchBook(issuedBookId);
+
                     }
                     break;
                 }
