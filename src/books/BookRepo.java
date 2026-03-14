@@ -56,12 +56,15 @@ public class BookRepo {
             ps.setInt(1, bookID);
 
             try (ResultSet rs = ps.executeQuery()){
-                Book returnedBook = new Book(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_QTY"));
-
-                return returnedBook;
+                rs.next();
+                Book foundBook = new Book(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_QTY"));
+                foundBook.setAvailableQty(rs.getInt("Avail_Qty"));
+                return foundBook;
             }
         }catch (SQLException e){
             System.out.println(e);
+            System.out.println(e.getSQLState());
+            System.out.println(e.getErrorCode());
         }
         return null;
     }

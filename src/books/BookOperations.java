@@ -11,7 +11,8 @@ public class BookOperations {
         Book searchedBook = repo.searchBookInDB(bookId);
 
         if (searchedBook != null){
-            dashboard.bookRemovedDetails(searchedBook);
+            dashboard.bookDetailsPrinterMember(searchedBook.getBookId(), searchedBook.getTitle(), searchedBook.getAuthor(), searchedBook.getTotalQty(), searchedBook.getAvailableQty());
+            return;
         }
         System.out.println("❌ No book found with that ID.");
     }

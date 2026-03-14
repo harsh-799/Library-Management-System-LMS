@@ -58,6 +58,10 @@ public class MemberOperations {
     }
 
     public void updatePassword(String newPassword,Member currentMember){
-
+        if (repo.updateMemberPassword(newPassword, currentMember)){
+            System.out.println("✅ Password updated successfully!");
+        } else {
+            System.out.println("❌ Incorrect old password.");
+        }
     }
 }

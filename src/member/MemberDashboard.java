@@ -216,14 +216,10 @@ public class MemberDashboard {
                 System.out.println("\n🔐 Update Password");
                 System.out.print("Enter the old password: ");
                 String oldPassword = sc.next();
-                if (member.getPassword().equals(oldPassword)){
+                if (member.getPassword().equals(oldPassword)) {
                     System.out.print("Enter the new Password: ");
                     String newPassword = sc.next();
-                    memberOperations.updatePassword(newPassword,member);
-                    // member = memberOperations.getMemberByID(member.getMemberId());
-                    System.out.println("✅ Password updated successfully!");
-                } else {
-                    System.out.println("❌ Incorrect old password.");
+                    memberOperations.updatePassword(newPassword, member);
                 }
                 break;
 

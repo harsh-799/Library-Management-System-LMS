@@ -138,4 +138,22 @@ public class MemberRepo {
         }
         return null;
     }
+
+    public boolean updateMemberPassword(String newPassword, Member member){
+        try (
+                Connection conn = DatabaseConnection.connectDB();
+                PreparedStatement ps = conn.prepareStatement("UPDATE member_cred_table SET " +
+                        "Password = ? WHERE Member_ID = ?")
+        ) {
+            ps.setString(1,newPassword);
+            ps.setLong(2,member.getMemberId());
+
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return false;
+    }
 }
