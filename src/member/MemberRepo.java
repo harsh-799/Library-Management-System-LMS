@@ -112,4 +112,25 @@ public class MemberRepo {
         if (hasMember) return true;
         return false;
     }
+
+    public Member updateMemberOnLogin(Member member){
+        try (
+                Connection conn = DatabaseConnection.connectDB();
+                Statement stmt = conn.createStatement()
+        ) {
+            ResultSet rs = stmt.executeQuery("SELECT mt.Fullname, COUNT(bi.Member_ID) " +
+                    "AS Book_Issued " +
+                    "FROM member_table mt LEFT JOIN book_issued bi " +
+                    "ON mt.Member_ID = bi.Member_ID " +
+                    "GROUP BY mt.Fullname");
+
+            rs.next();
+            member.setFullName(rs.getString("Fullname"));
+            member.setTotalBooksIssued(rs.getInt("Book_Issued"));
+            return member;
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return null;
+    }
 }

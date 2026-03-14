@@ -1,7 +1,5 @@
 package member;
 
-import java.util.ArrayList;
-
 public class Member{
 
     private long memberId;
@@ -10,7 +8,6 @@ public class Member{
     private String password;
     private String role;
     private int totalBooksIssued;
-    private ArrayList<Integer> issuedBookIds;
 
     public Member() {
     }
@@ -39,16 +36,8 @@ public class Member{
         this.totalBooksIssued = totalBooksIssued;
     }
 
-    public ArrayList<Integer> getIssuedBookIds() {
-        return issuedBookIds;
-    }
-
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public void setIssuedBookIds(int id) {
-        this.issuedBookIds.add(id);
     }
 
     private long generateId(){
@@ -78,6 +67,5 @@ public class Member{
         this.memberId = generateId();
         this.role = "member";
         this.totalBooksIssued = 0;
-        this.issuedBookIds = new ArrayList<>();
     }
 }

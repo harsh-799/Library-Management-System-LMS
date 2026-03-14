@@ -27,6 +27,14 @@ public class MemberOperations {
         }
     }
 
+    public Member syncMemberOnLogin(Member member){
+        Member syncedMember = repo.updateMemberOnLogin(member);
+
+        if (syncedMember != null) return syncedMember;
+        System.out.println("Failed to Sync..");
+        return member;
+    }
+
     public boolean issueBookForMember(Member member, int bookId){
         return false;
     }

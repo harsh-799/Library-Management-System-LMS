@@ -243,6 +243,9 @@ public class MemberDashboard {
     public void start(Member member) {
         this.member = member;
 
+        // Sync the Data from the DB.
+        this.member = memberOperations.syncMemberOnLogin(member);
+
         String greeting = getGreeting();
 
         if (greeting.equals("It's Closed")){
