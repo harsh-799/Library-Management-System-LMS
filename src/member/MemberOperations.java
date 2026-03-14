@@ -6,8 +6,12 @@ public class MemberOperations {
 
     private final MemberRepo repo = new MemberRepo();
 
-    public Member deleteMember(long memberId){
-        return null;
+    public void removeMember(long memberId){
+        if (repo.deleteMember(memberId)){
+            System.out.println("\uD83D\uDDD1 Member with MemberID:  " + memberId+ " is deleted successfully.");
+        } else {
+            System.out.println("❌ No member found with that ID.");
+        }
     }
 
     public void getAllMembers(){
@@ -38,6 +42,13 @@ public class MemberOperations {
     }
 
     public void addMember(Member m){
+        if (repo.saveMember(m.getMemberId(), m.getFullName(), m.getUsername(), m.getPassword())){
+            System.out.println("✅ Member created successfully!\n Below are the credentials: ");
+            System.out.println("username : " + m.getUsername());
+            System.out.println("password : " + m.getPassword());
+        } else {
+            System.out.println("There might be some issues in Saving the Member Data");
+        }
     }
 
     public void updatePassword(String newPassword,Member currentMember){

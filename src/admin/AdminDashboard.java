@@ -70,12 +70,7 @@ public class AdminDashboard {
                 long memberId = sc.nextLong();
                 sc.nextLine();
 
-                Member deletedMember = memberOperations.deleteMember(memberId);
-                if (deletedMember != null){
-                    System.out.println("\uD83D\uDDD1 Member named " + deletedMember.getFullName() + " with ID:  " + deletedMember.getMemberId()+ "is deleted successfully.");
-                } else {
-                    System.out.println("❌ No member found with that ID.");
-                }
+                memberOperations.removeMember(memberId);
                 break;
 
             case 3:
