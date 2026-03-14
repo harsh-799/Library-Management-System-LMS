@@ -1,23 +1,36 @@
 package auth;
 
-import java.util.Scanner;
 import admin.AdminDashboard;
 import member.Member;
 import member.MemberDashboard;
+import admin.Admin;
+import login.LoginDashboard;
+import util.DatabaseInitializer;
 
 public class AuthService {
 
-    Member loggedInMember;
+    private Admin loggedInAdmin;
+    private Member loggedInMember;
+    private DatabaseInitializer dbInitializer;
+    private AuthRepo repo = new AuthRepo();
 
-    public String authenticateUser(){
-        Scanner sc = new Scanner(System.in);
+    public void setAdminDetails(Admin admin){
+        if (repo.saveAdmin(admin)){
+            System.out.println("Admin Added Successfully.");
+        }
+    }
 
-        System.out.println("🔐 Please Login to Continue\n");
-        System.out.print("👤 Username: ");
-        String userName = sc.next();
+    public String authenticateUser(String username, String password){
+        // Checking the Admin Credentials
+        loggedInAdmin = repo.getAdmin();
 
-        System.out.print("🔑 Password: ");
-        String password = sc.next();
+        if (loggedInAdmin != null && loggedInAdmin.getUsername().equals(username) && loggedInAdmin.getPassword().equals(password)){
+            return "admin";
+        }
+
+        // Checking the Member Credentials
+        loggedInMember = repo.authenticateMember(username, password);
+        if (loggedInMember != null) return "member";
 
         return "invalid";
     }
@@ -40,8 +53,25 @@ public class AuthService {
     }
 
     public void start() {
+
+        LoginDashboard dashboardUI = new LoginDashboard();
+
+        // For every Run, Create Essentials Table if it doesn't exists in DB.
+        dbInitializer = new DatabaseInitializer();
+        dbInitializer.initializeAllTables();
+
+        // Checks, If there's any admin in the LMS from earlier.
+        Admin adminCred = repo.getAdmin();
+
+        if (adminCred == null){
+            loggedInAdmin = dashboardUI.createAdmin();
+            setAdminDetails(loggedInAdmin);
+            loggedInAdmin = null; // After saving Admin Records Reset Admin to null.
+        }
+
         while (true){
-            String role = authenticateUser();
+            String[] userCred = dashboardUI.collectUserCredentials();
+            String role = authenticateUser(userCred[0], userCred[1]);
             if (!role.equals("invalid")){
                 openDashboard(role);
                 break;
@@ -49,6 +79,5 @@ public class AuthService {
                 System.out.println("❌ Invalid username or password.\n");
             }
         }
-
     }
 }

@@ -6,9 +6,9 @@ import admin.Admin;
 import auth.AuthService;
 
 public class LoginDashboard {
+    private final Scanner sc = new Scanner(System.in);
 
     public Admin createAdmin(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("⚠ No Admin Found!");
         System.out.println("🔐 Creating Admin Account...\n");
         Admin admin = new Admin();
@@ -20,6 +20,17 @@ public class LoginDashboard {
         System.out.println("✅ Admin Profile Created Successfully!\n");
 
         return admin;
+    }
+
+    public String[] collectUserCredentials(){
+        System.out.println("🔐 Please Login to Continue\n");
+        System.out.print("👤 Username: ");
+        String userName = sc.next();
+
+        System.out.print("🔑 Password: ");
+        String password = sc.next();
+
+        return new String[]{userName, password};
     }
 
     public void start() {

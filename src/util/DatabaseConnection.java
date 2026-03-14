@@ -11,7 +11,7 @@ public class DatabaseConnection {
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "ideapad"; // 📢 Exposed
 
-    public Connection connectDB() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_NAME, DB_PASSWORD);
+    public static Connection connectDB() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
     }
 }
