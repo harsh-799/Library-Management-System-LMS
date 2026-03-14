@@ -80,9 +80,7 @@ public class AdminDashboard {
             case 4:
                 System.out.print("Enter the member ID to be Searched: ");
                 long memID = sc.nextLong();
-                System.out.println();
-                Member resultMember = memberOperations.getMemberByID(memID);
-                memberOperations.printMemberDetails(resultMember);
+                memberOperations.getMemberByID(memID);
                 break;
 
             case 5:

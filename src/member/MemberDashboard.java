@@ -115,6 +115,14 @@ public class MemberDashboard {
         System.out.println(" ---- ");
     }
 
+    public void printMemberDetails(Long memberID, String fullname, String username, String bookIssued){
+        System.out.println("MemberID: " + memberID);
+        System.out.println("FullName: " + fullname);
+        System.out.println("userName: " + username);
+        System.out.println("Book Issued: " + bookIssued);
+        System.out.println("-----           -----");
+    }
+
     public boolean handleChoice(){
         showMenu();
 
@@ -158,7 +166,7 @@ public class MemberDashboard {
 
                     if (updated){
                         System.out.println("✅ Book issued successfully!");
-                        member = memberOperations.getMemberByID(member.getMemberId());
+                        // member = memberOperations.getMemberByID(member.getMemberId());
                     }
                 }
                 break;
@@ -215,7 +223,7 @@ public class MemberDashboard {
                     System.out.print("Enter the new Password: ");
                     String newPassword = sc.next();
                     memberOperations.updatePassword(newPassword,member);
-                    member = memberOperations.getMemberByID(member.getMemberId());
+                    // member = memberOperations.getMemberByID(member.getMemberId());
                     System.out.println("✅ Password updated successfully!");
                 } else {
                     System.out.println("❌ Incorrect old password.");

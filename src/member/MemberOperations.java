@@ -15,18 +15,16 @@ public class MemberOperations {
     }
 
     public void getAllMembers(){
-
+        if (!repo.viewAllMembers()){
+            System.out.println("📚 Library has no members 😔");
+        }
     }
 
-    public void printMemberDetails(Member val){
-        System.out.println("MemberID: " + val.getMemberId());
-        System.out.println("FullName: " + val.getFullName());
-        System.out.println("userName: " + val.getUsername());
-        System.out.println("Book Issued: " + val.getTotalBooksIssued());
-    }
 
-    public Member getMemberByID(long memberID){
-       return null;
+    public void getMemberByID(long memberID){
+        if (!repo.getMember(memberID)){
+            System.out.println("❌ No member found with that ID.");
+        }
     }
 
     public boolean issueBookForMember(Member member, int bookId){
