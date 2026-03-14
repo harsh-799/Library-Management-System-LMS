@@ -1,11 +1,8 @@
 package member;
 
-import java.io.*;
 import java.util.ArrayList;
 
-public class Member implements Serializable{
-
-    private static final long serialVersionUID = 1L;
+public class Member{
 
     private long memberId;
     private String fullName;
@@ -14,6 +11,9 @@ public class Member implements Serializable{
     private String role;
     private int totalBooksIssued;
     private ArrayList<Integer> issuedBookIds;
+
+    public Member() {
+    }
 
     public long getMemberId() {
         return memberId;
@@ -43,6 +43,10 @@ public class Member implements Serializable{
         return issuedBookIds;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public void setIssuedBookIds(int id) {
         this.issuedBookIds.add(id);
     }
@@ -57,6 +61,14 @@ public class Member implements Serializable{
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setMemberId(long memberId) {
+        this.memberId = memberId;
     }
 
     public Member(String fullName, String username, String password) {
