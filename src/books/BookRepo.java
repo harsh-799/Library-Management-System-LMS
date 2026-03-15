@@ -85,8 +85,7 @@ public class BookRepo {
                 } else {
                     dashboardUi.bookDetailsPrinterMember(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_Qty"), rs.getInt("Avail_Qty"));
                 }
-
-                return true;
+                hasBook = true;
             }
         } catch (SQLException e) {
             System.out.println(e);
