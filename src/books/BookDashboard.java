@@ -23,12 +23,4 @@ public class BookDashboard {
         }
         System.out.println("------");
     }
-
-    public void bookRemovedDetails(Book book){
-        System.out.println("🗑 Book removed successfully.");
-        System.out.println("Removed Book Details are: ");
-        System.out.println("BookID: "+book.getBookId());
-        System.out.println("Title: "+book.getTitle());
-        System.out.println("Author: "+book.getAuthor());
-    }
 }

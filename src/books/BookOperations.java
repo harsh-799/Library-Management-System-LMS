@@ -1,5 +1,6 @@
 package books;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class BookOperations {
@@ -51,12 +52,28 @@ public class BookOperations {
         System.out.println("🔍 No Book with Book Title: " + bookTitle + " is found 📚");
     }
 
-    public Book issueBook(int bookId){
-        return null;
+    public boolean issueBook(int bookId, long memberId){
+        LocalDate todaysDate = LocalDate.now();
+        LocalDate returnDate = todaysDate.plusDays(7);
+        int issueStatus = repo.createBookIssueEntry(bookId, memberId, todaysDate, returnDate);
+
+        if (issueStatus == -1){
+            System.out.println("⏰ All books are issued 📚. Kindly wait for a return 🔄");
+            return false;
+        } else if (issueStatus == 1) {
+            System.out.println("❌ Invalid Book ID");
+            return false;
+        }
+        return true;
     }
 
-    public Book returnBook(int bookId){
-        return null;
+    public boolean returnBook(int bookId, long memberId){
+        int returnStatus = repo.createBookReturnEntry(bookId, memberId);
+
+        if (returnStatus == 0){
+            return true;
+        }
+        return false;
     }
 
     public void viewAllBooks(String role){

@@ -3,6 +3,7 @@ package member;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.ListIterator;
 import java.util.Scanner;
 import books.BookOperations;
 import books.Book;
@@ -139,40 +140,65 @@ public class MemberDashboard {
 
             case 3:
                 System.out.println("\n📥 Issue a Book");
+
+                if (member.getMemberIssuedBookIds().size() == 3){
+                    System.out.println("⚠️ Limit reached! You have already issued 3 books 📚. Only 3 allowed at once.");
+                    break;
+                }
+
                 System.out.print("📘 Enter Book ID: ");
                 int bookId = sc.nextInt();
 
-                if (memberOperations.getIssued(member).contains(Integer.valueOf(bookId))){
+                boolean alreaadyIssued = false;
+
+                for (Integer bookIDs: member.getMemberIssuedBookIds()){
+                    if (bookIDs == bookId){
+                        alreaadyIssued = true;
+                        break;
+                    }
+                }
+
+                if (alreaadyIssued) {
                     System.out.println("⚠ You have already issued this book.");
                     break;
                 }
 
-                Book resIssue = bookOperations.issueBook(bookId);
-                if (resIssue != null){
-                    boolean updated = memberOperations.issueBookForMember(member,bookId);
+                boolean bookIssuedStatus = bookOperations.issueBook(bookId, member.getMemberId());
 
-                    if (updated){
-                        System.out.println("✅ Book issued successfully!");
-                        // member = memberOperations.getMemberByID(member.getMemberId());
-                    }
+                if (bookIssuedStatus){
+                    member.setMemberIssuedBookIds(bookId);
+                    member.setTotalBooksIssued(member.getTotalBooksIssued()+1);
+                    System.out.println("✅ Book issued successfully!");
                 }
                 break;
 
             case 4:
                 System.out.println("\n📤 Return a Book");
-                System.out.print("📘 Enter Book ID: ");
-                int bookIdforReturn = sc.nextInt();
-                Book returnedBook = bookOperations.returnBook(bookIdforReturn);
 
-                if (returnedBook != null){
-                    boolean updated = memberOperations.returnBookForMember(member,bookIdforReturn);
-
-                    if (updated){
-                        System.out.println("✅ Book returned successfully!");
-                    } else{
-                        System.out.println("❌ Invalid Book ID or return failed.");
-                    }
+                if (member.getMemberIssuedBookIds().isEmpty()){
+                    System.out.println("📚 No book has been issued yet 🙅‍♂️");
+                    break;
                 }
+
+                System.out.print("📘 Enter Book ID: ");
+                int bookIdForReturn = sc.nextInt();
+                boolean bookReturnStatus = bookOperations.returnBook(bookIdForReturn, member.getMemberId());
+
+                if (bookReturnStatus){
+                    ListIterator<Integer> listIterator = member.getMemberIssuedBookIds().listIterator();
+
+                    while (listIterator.hasNext()){
+                        Integer currBookId = listIterator.next();
+
+                        if (currBookId == bookIdForReturn){
+                            listIterator.remove();
+                        }
+                    }
+                    member.setTotalBooksIssued(member.getTotalBooksIssued() - 1);
+                    System.out.println("✅ Book returned successfully!");
+                    break;
+                }
+                System.out.println("❌ Invalid Book ID or return failed.");
                 break;
 
             case 5:

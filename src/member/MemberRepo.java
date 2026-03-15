@@ -15,11 +15,11 @@ public class MemberRepo {
                 PreparedStatement memberTable = conn.prepareStatement("INSERT INTO member_table " +
                         "(Member_ID, Fullname) VALUES (?, ?)")
         ) {
-            memberCredTable.setLong(1,memberID);
-            memberCredTable.setString(2,username);
-            memberCredTable.setString(3,password);
+            memberCredTable.setLong(1, memberID);
+            memberCredTable.setString(2, username);
+            memberCredTable.setString(3, password);
 
-            memberTable.setLong(1,memberID);
+            memberTable.setLong(1, memberID);
             memberTable.setString(2, fullname);
 
             int rowsAffectedMemCred = memberCredTable.executeUpdate();
@@ -33,32 +33,32 @@ public class MemberRepo {
         return false;
     }
 
-    protected boolean deleteMember(long memberID){
+    protected boolean deleteMember(long memberID) {
         try (
                 Connection conn = DatabaseConnection.connectDB();
                 PreparedStatement memberCredTable = conn.prepareStatement("DELETE FROM" +
-                                                                        "member_cred_table " +
-                                                                        "WHERE Member_ID = ?");
+                        "member_cred_table " +
+                        "WHERE Member_ID = ?");
                 PreparedStatement memberTable = conn.prepareStatement("DELETE FROM" +
-                                                                        "member_table " +
-                                                                        "WHERE Member_ID = ?")
+                        "member_table " +
+                        "WHERE Member_ID = ?")
         ) {
 
-            memberCredTable.setLong(1,memberID);
-            memberTable.setLong(1,memberID);
+            memberCredTable.setLong(1, memberID);
+            memberTable.setLong(1, memberID);
 
             int rowsAffectedMemCred = memberCredTable.executeUpdate();
             int rowsAffectedMemTable = memberTable.executeUpdate();
 
             return rowsAffectedMemCred > 0 && rowsAffectedMemTable > 0;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return false;
     }
 
-    public boolean viewAllMembers(){
+    public boolean viewAllMembers() {
         boolean hasRecords = false;
         MemberDashboard viewMemberUi = new MemberDashboard();
         try (Connection conn = DatabaseConnection.connectDB();
@@ -73,18 +73,18 @@ public class MemberRepo {
                      "GROUP BY mt.Member_ID, mt.Fullname, mc.Username")
         ) {
 
-            while (rs.next()){
-                viewMemberUi.printMemberDetails(rs.getLong("Member_ID"),rs.getString("Fullname"),rs.getString("Username"),rs.getString("Book_Issued"));
+            while (rs.next()) {
+                viewMemberUi.printMemberDetails(rs.getLong("Member_ID"), rs.getString("Fullname"), rs.getString("Username"), rs.getString("Book_Issued"));
                 hasRecords = true;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         if (hasRecords) return true;
         return false;
     }
 
-    public boolean getMember(long memberID){
+    public boolean getMember(long memberID) {
         MemberDashboard viewMemberUi = new MemberDashboard();
         boolean hasMember = false;
         try (
@@ -100,21 +100,21 @@ public class MemberRepo {
                         "WHERE mt.Member_ID = ? " +
                         "GROUP BY mt.Member_ID, mt.Fullname, mc.Username")
         ) {
-            ps.setLong(1,memberID);
+            ps.setLong(1, memberID);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 viewMemberUi.printMemberDetails(rs.getLong("Member_ID"), rs.getString("Fullname"), rs.getString("Username"), rs.getString("Book_Issued"));
                 hasMember = true;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         if (hasMember) return true;
         return false;
     }
 
-    public Member updateMemberOnLogin(Member member){
+    public Member updateMemberOnLogin(Member member) {
         try (
                 Connection conn = DatabaseConnection.connectDB();
                 PreparedStatement ps = conn.prepareStatement("SELECT mt.Fullname, COUNT(bi.Member_ID) " +
@@ -127,7 +127,7 @@ public class MemberRepo {
                         "Book_Issued WHERE Member_ID = ?")
         ) {
             ps.setLong(1, member.getMemberId());
-            ps1.setLong(1,member.getMemberId());
+            ps1.setLong(1, member.getMemberId());
 
             try (
                     ResultSet rs = ps.executeQuery();
@@ -137,7 +137,7 @@ public class MemberRepo {
                 member.setFullName(rs.getString("Fullname"));
                 member.setTotalBooksIssued(rs.getInt("Book_Issued"));
 
-                while (rs1.next()){
+                while (rs1.next()) {
                     member.setMemberIssuedBookIds(rs1.getInt("Book_ID"));
                 }
                 return member;
@@ -148,19 +148,19 @@ public class MemberRepo {
         return null;
     }
 
-    public boolean updateMemberPassword(String newPassword, Member member){
+    public boolean updateMemberPassword(String newPassword, Member member) {
         try (
                 Connection conn = DatabaseConnection.connectDB();
                 PreparedStatement ps = conn.prepareStatement("UPDATE member_cred_table SET " +
                         "Password = ? WHERE Member_ID = ?")
         ) {
-            ps.setString(1,newPassword);
-            ps.setLong(2,member.getMemberId());
+            ps.setString(1, newPassword);
+            ps.setLong(2, member.getMemberId());
 
             int rowsAffected = ps.executeUpdate();
 
             return rowsAffected > 0;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return false;
