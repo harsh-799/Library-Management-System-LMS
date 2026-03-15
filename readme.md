@@ -1,8 +1,8 @@
 # 📚 Library Management System (Console Based)
 
-A fully functional **Java Console-Based Library Management System** built using layered architecture and file-based persistence (Serialization).
+A fully functional Java Console-Based Library Management System built using **JDBC** and **MySQL** with layered architecture.
 
-This project simulates real-world backend logic including authentication, role-based dashboards, book issuing/returning, and member management.
+This project simulates real-world backend logic including authentication, role-based dashboards, book issuing/returning, and member management with database persistence.
 
 ---
 
@@ -11,7 +11,8 @@ This project simulates real-world backend logic including authentication, role-b
 ### 🔐 Authentication System
 - admin account auto-creation (if not exists)
 - Role-based login (admin / member)
-- Credential verification using serialized storage
+- Credential verification using database queries
+- Password update functionality for members
 
 ---
 
@@ -46,11 +47,36 @@ This project simulates real-world backend logic including authentication, role-b
 
 - Object-Oriented Programming (OOP)
 - Layered Architecture (UI → Operations → Repository → Model)
-- Java Serialization (`.ser` file storage)
+- JDBC (Java Database Connectivity)
+- MySQL Database Integration
+- SQL Joins & Aggregations
 - Collections (`ArrayList`, `ListIterator`)
 - Encapsulation & Proper Model Design
 - Separation of Concerns
 - Input Validation & Edge Case Handling
+
+---
+
+## 🔧 Implemented Versions
+
+This project has been implemented using multiple backend persistence approaches for learning purposes:
+
+### 1️⃣ Java Serialization Version
+
+- File-based storage using .ser files 
+- Used Java Object Serialization for persistence
+
+### 2️⃣ JDBC + MySQL Version (Current)
+- Database-based persistence using JDBC 
+- SQL queries for CRUD operations 
+- Relational database design
+
+### 3️⃣ Spring Boot REST API (Coming Soon 🚀)
+- Planned upgrade to:
+- Spring Boot backend 
+- REST API architecture 
+- Spring Data JPA / Hibernate 
+- Production-level backend design
 
 ---
 
@@ -84,34 +110,52 @@ This project simulates real-world backend logic including authentication, role-b
 ### 📘 Book Return Flow
 ![Return Book](assets/screenshots/bookReturn.png)
 
+### 🛢️ Database Design
+![Database Design](assets/screenshots/dbDesign.png)
+
+---
+
 ## 📂 Project Structure
 
 ```
-LibraryManagementSystem/
+Library-Management-System/
 │
-├── LandingPage.java
+├── src
 │
-├── login/
-│   ├── LoginDashboard.java
-│   └── login.java
-│
-├── admin/
+├── admin
+│   ├── Admin.java
 │   └── AdminDashboard.java
 │
-├── member/
-│   ├── member.java
+├── auth
+│   ├── AuthRepo.java
+│   └── AuthService.java
+│
+├── books
+│   ├── Book.java
+│   ├── BookDashboard.java
+│   ├── BookOperations.java
+│   └── BookRepo.java
+│
+├── login
+│   └── LoginDashboard.java
+│
+├── member
+│   ├── Member.java
 │   ├── MemberDashboard.java
 │   ├── MemberOperations.java
 │   └── MemberRepo.java
 │
-├── books/
-│   ├── Book.java
-│   ├── BookOperations.java
-│   └── BookRepo.java
+├── main
+│   └── LandingPage.java
 │
-└── auth/
-    ├── admin.java
-    └── CredRepo.java
+├── util
+│   ├── DatabaseConnection.java
+│   └── DatabaseInitializer.java
+│
+├── assets
+│   └── screenshots
+│
+└── README.md
 ```
 
 
@@ -119,14 +163,15 @@ LibraryManagementSystem/
 
 ## 💾 Data Persistence
 
-This system uses Java Serialization to store:
+This system uses MySQL database via JDBC for storing application data.
 
-- admin credentials → `Credentials.ser`
-- Members data → `MemberData.ser`
-- books data → `BooksData.ser`
-
-All data persists between application runs.
-
+```declarative
+admin_table
+member_table
+member_cred_table
+book_table
+book_issued
+```
 ---
 
 ## 🔄 Book Issuing Logic
@@ -134,6 +179,8 @@ All data persists between application runs.
 - Prevents issuing the same book twice to the same member
 - Prevents issuing when stock is unavailable
 - Automatically updates available quantity
+- Maintains book issuing records in the database
+- Synchronizes issued books with member accounts during login
 - Keeps member and book records in sync
 
 ---
@@ -152,16 +199,19 @@ Model (Data Layer)
 ## 🛠 Technologies Used
 
 - Java
-- Java IO (File Streams)
-- Object Serialization
+- JDBC
+- MySQL
+- SQL
 - OOP Principles
 
 ---
 
 ## 📌 Future Improvements (Will be done soon)
 
-- Replace serialization with database (MySQL / PostgreSQL)
-- Convert to Spring Boot REST API
+- Convert console application to Spring Boot REST API 
+- Add authentication using JWT 
+- Add book due-date tracking & fine system 
+- Build a simple frontend (React / HTML)
 
 ---
  
