@@ -17,6 +17,16 @@ public class BookOperations {
         System.out.println("❌ No book found with that ID.");
     }
 
+    public Book searchBookForIssuedBooks(int bookId){
+        Book searchedBook = repo.searchBookInDB(bookId);
+
+        if (searchedBook != null){
+            return searchedBook;
+        }
+        System.out.println("❌ No book found with that ID.");
+        return null;
+    }
+
     public void searchBookByAuthor(String authorName){
         ArrayList<Integer> authorBookCollN = repo.getBooksByAuthor(authorName);
         if (!authorBookCollN.isEmpty()){

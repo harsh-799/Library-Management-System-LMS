@@ -3,7 +3,6 @@ package member;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.ListIterator;
 import java.util.Scanner;
 import books.BookOperations;
 import books.Book;
@@ -179,15 +178,11 @@ public class MemberDashboard {
             case 5:
                 System.out.println("\n📚 Your Issued Books:");
                 System.out.println("---------------------------------------");
-                ArrayList<Integer> issuedBook = memberOperations.getIssued(member);
+                ArrayList<Integer> issuedBook = member.getMemberIssuedBookIds();
 
-                if (!issuedBook.isEmpty()){
-                    System.out.println("Your all issues are: ");
-                    ListIterator<Integer> it = issuedBook.listIterator();
-                    while (it.hasNext()){
-                        Integer issuedBookId = it.next();
-                        bookOperations.searchBook(issuedBookId);
-
+                if (!issuedBook.isEmpty()) {
+                    for (Integer bookID: issuedBook){
+                        issuesPrinter(bookOperations.searchBookForIssuedBooks(bookID));
                     }
                     break;
                 }

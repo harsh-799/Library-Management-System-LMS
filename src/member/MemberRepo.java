@@ -122,16 +122,24 @@ public class MemberRepo {
                         "FROM member_table mt LEFT JOIN book_issued bi " +
                         "ON mt.Member_ID = bi.Member_ID " +
                         "WHERE mt.Member_ID = ? " +
-                        "GROUP BY mt.Fullname")
+                        "GROUP BY mt.Fullname");
+                PreparedStatement ps1 = conn.prepareStatement("SELECT Book_ID from " +
+                        "Book_Issued WHERE Member_ID = ?")
         ) {
             ps.setLong(1, member.getMemberId());
+            ps1.setLong(1,member.getMemberId());
 
             try (
                     ResultSet rs = ps.executeQuery();
+                    ResultSet rs1 = ps1.executeQuery();
             ) {
-                rs.next();
+                rs.next(); // Since only one data will be there so no while loop, and it's 100% Sure that MemberId will be correct unless no body touched DB and chnaged memberID.
                 member.setFullName(rs.getString("Fullname"));
                 member.setTotalBooksIssued(rs.getInt("Book_Issued"));
+
+                while (rs1.next()){
+                    member.setMemberIssuedBookIds(rs1.getInt("Book_ID"));
+                }
                 return member;
             }
         } catch (SQLException e) {
