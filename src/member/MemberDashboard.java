@@ -69,22 +69,13 @@ public class MemberDashboard {
             case 2:
                 System.out.println("Enter the Author Name: ");
                 String authorName = sc.nextLine();
-                ArrayList<Book> resAuthor = bookOperations.searchBookByAuthor(authorName);
-                if (resAuthor != null){
-                    for (Book val: resAuthor){
-                        resultPrinter(val);
-                        break;
-                    }
-                }
-                if (resAuthor.isEmpty()) System.out.println("No Book with Author Name: "+authorName+" is found.");
+                bookOperations.searchBookByAuthor(authorName);
                 break;
 
             case 3:
                 System.out.print("Enter the Book Title: ");
                 String bookTitle = sc.nextLine();
-                Book resTitle = bookOperations.searchBookByTitle(bookTitle);
-
-                if (resTitle != null) resultPrinter(resTitle);
+                bookOperations.searchBookByTitle(bookTitle);
                 break;
 
             default:

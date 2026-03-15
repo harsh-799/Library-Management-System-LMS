@@ -3,6 +3,7 @@ package books;
 import util.DatabaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class BookRepo {
 
@@ -56,10 +57,11 @@ public class BookRepo {
             ps.setInt(1, bookID);
 
             try (ResultSet rs = ps.executeQuery()){
-                rs.next();
-                Book foundBook = new Book(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_QTY"));
-                foundBook.setAvailableQty(rs.getInt("Avail_Qty"));
-                return foundBook;
+                if (rs.next()) {
+                    Book foundBook = new Book(rs.getInt("Book_ID"), rs.getString("Title"), rs.getString("Author"), rs.getInt("Total_QTY"));
+                    foundBook.setAvailableQty(rs.getInt("Avail_Qty"));
+                    return foundBook;
+                }
             }
         }catch (SQLException e){
             System.out.println(e);
@@ -90,5 +92,49 @@ public class BookRepo {
         }
         if (hasBook) return true;
         return false;
+    }
+
+    public ArrayList<Integer> getBooksByAuthor(String authorName){
+        ArrayList<Integer> authorBookCollection = new ArrayList<>();
+        try (
+                Connection conn = DatabaseConnection.connectDB();
+                PreparedStatement ps = conn.prepareStatement("SELECT Book_id from book_table " +
+                        "WHERE Author = ?")
+        ) {
+            ps.setString(1, authorName);
+            try (
+                    ResultSet rs = ps.executeQuery()
+            ) {
+                while (rs.next()){
+                    authorBookCollection.add(rs.getInt("Book_ID"));
+                }
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return authorBookCollection;
+    }
+
+    public ArrayList<Integer> getBooksByBookTitle(String bookTitle){
+        ArrayList<Integer> bookIdsByTitle = new ArrayList<>();
+        try (
+                Connection conn = DatabaseConnection.connectDB();
+                PreparedStatement ps = conn.prepareStatement("SELECT Book_id from book_table " +
+                        "WHERE Title = ?")
+        ) {
+            ps.setString(1, bookTitle);
+            try (
+                    ResultSet rs = ps.executeQuery()
+            ) {
+                while (rs.next()){
+                    bookIdsByTitle.add(rs.getInt("Book_ID"));
+                }
+            } catch (SQLException e){
+                System.out.println(e);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return bookIdsByTitle;
     }
 }

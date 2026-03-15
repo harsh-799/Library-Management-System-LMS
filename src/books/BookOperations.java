@@ -17,12 +17,28 @@ public class BookOperations {
         System.out.println("❌ No book found with that ID.");
     }
 
-    public Book searchBookByTitle(String title){
-        return null;
+    public void searchBookByAuthor(String authorName){
+        ArrayList<Integer> authorBookCollN = repo.getBooksByAuthor(authorName);
+        if (!authorBookCollN.isEmpty()){
+            for (Integer bookID: authorBookCollN) {
+                Book foundBook = repo.searchBookInDB(bookID);
+                dashboard.bookDetailsPrinterMember(foundBook.getBookId(), foundBook.getTitle(), foundBook.getAuthor(), foundBook.getTotalQty(), foundBook.getAvailableQty());
+            }
+            return;
+        }
+        System.out.println("🔍 No Book with Author Name: " + authorName + " is found 📚");
     }
 
-    public ArrayList<Book> searchBookByAuthor(String author){
-        return null;
+    public void searchBookByTitle(String bookTitle){
+        ArrayList<Integer> bookIdsByTitle = repo.getBooksByBookTitle(bookTitle);
+        if (!bookIdsByTitle.isEmpty()){
+            for (Integer bookID: bookIdsByTitle) {
+                Book foundBook = repo.searchBookInDB(bookID);
+                dashboard.bookDetailsPrinterMember(foundBook.getBookId(), foundBook.getTitle(), foundBook.getAuthor(), foundBook.getTotalQty(), foundBook.getAvailableQty());
+            }
+            return;
+        }
+        System.out.println("🔍 No Book with Book Title: " + bookTitle + " is found 📚");
     }
 
     public Book issueBook(int bookId){
