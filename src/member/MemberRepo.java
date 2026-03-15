@@ -3,7 +3,6 @@ package member;
 import util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class MemberRepo {
 

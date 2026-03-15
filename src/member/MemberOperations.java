@@ -1,7 +1,5 @@
 package member;
 
-import java.util.ArrayList;
-
 public class MemberOperations {
 
     private final MemberRepo repo = new MemberRepo();
@@ -33,18 +31,6 @@ public class MemberOperations {
         if (syncedMember != null) return syncedMember;
         System.out.println("Failed to Sync..");
         return member;
-    }
-
-    public boolean issueBookForMember(Member member, int bookId){
-        return false;
-    }
-
-    public ArrayList<Integer> getIssued(Member member){
-        return null;
-    }
-
-    public boolean returnBookForMember(Member member, int bookId){
-        return false;
     }
 
     public void addMember(Member m){

@@ -84,18 +84,6 @@ public class MemberDashboard {
         }
     }
 
-    public void resultPrinter(Book book) {
-        System.out.println("Book Found in the Library: ");
-        System.out.println("BookID: " + book.getBookId());
-        System.out.println("Book Title: " + book.getTitle());
-        System.out.println("Book Author: " + book.getAuthor());
-        if (book.getAvailableQty() > 0) {
-            System.out.println("Status: Available");
-        } else {
-            System.out.println("Status: Not Available");
-        }
-    }
-
     public void issuesPrinter(Book book){
         System.out.println("BookID: " + book.getBookId());
         System.out.println("Book Title: " + book.getTitle());

@@ -25,12 +25,12 @@ public class AuthService {
         loggedInAdmin = repo.getAdmin();
 
         if (loggedInAdmin != null && loggedInAdmin.getUsername().equals(username) && loggedInAdmin.getPassword().equals(password)){
-            return "admin";
+            return loggedInAdmin.getRole();
         }
 
         // Checking the Member Credentials
         loggedInMember = repo.authenticateMember(username, password);
-        if (loggedInMember != null) return "member";
+        if (loggedInMember != null) return loggedInMember.getRole();
 
         return "invalid";
     }
