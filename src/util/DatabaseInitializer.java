@@ -25,7 +25,7 @@ public class DatabaseInitializer {
                     "TOTAL_QTY INT)");
 
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS " +
-                    "book_issued (Issue_ID BIGINT PRIMARY KEY, Member_ID BIGINT, Book_ID INT, Issued_Date DATE, " +
+                    "book_issued (Issue_ID BIGINT AUTO_INCREMENT PRIMARY KEY, Member_ID BIGINT, Book_ID INT, Issued_Date DATE, " +
                     "Return_Date DATE, FOREIGN KEY(Member_ID) REFERENCES member_table(Member_ID), " +
                     "FOREIGN KEY(Book_ID) REFERENCES book_table(Book_ID))");
 
