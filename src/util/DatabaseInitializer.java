@@ -30,7 +30,10 @@ public class DatabaseInitializer {
                     "FOREIGN KEY(Book_ID) REFERENCES book_table(Book_ID))");
 
         }catch (SQLException e){
-            System.out.println("Database Initializer error" + e);
+           if (e.getErrorCode() == 1049){
+               System.out.println("Please Create LMS Database in MYSQL");
+               System.exit(0);
+           }
         }
     }
 }

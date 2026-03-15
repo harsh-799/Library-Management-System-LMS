@@ -35,7 +35,7 @@ public class MemberRepo {
     protected boolean deleteMember(long memberID) {
         try (
                 Connection conn = DatabaseConnection.connectDB();
-                PreparedStatement memberCredTable = conn.prepareStatement("DELETE FROM" +
+                PreparedStatement memberCredTable = conn.prepareStatement("DELETE FROM " +
                         "member_cred_table " +
                         "WHERE Member_ID = ?");
                 PreparedStatement memberTable = conn.prepareStatement("DELETE FROM" +
