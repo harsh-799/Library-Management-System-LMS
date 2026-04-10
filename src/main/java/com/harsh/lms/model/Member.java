@@ -1,7 +1,6 @@
 package com.harsh.lms.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -11,9 +10,9 @@ public class Member{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberId;
     private String fullName;
-    private final String role = "member";
+    private final String role = "MEMBER";
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberCredentials memberCredentials;
 
     @OneToMany(mappedBy = "member")

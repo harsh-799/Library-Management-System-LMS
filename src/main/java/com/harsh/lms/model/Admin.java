@@ -8,7 +8,7 @@ public class Admin {
     @Id
     private String username;
     private String password;
-    private final String role = "admin";
+    private final String role = "ADMIN";
 
     public Admin(){
     }

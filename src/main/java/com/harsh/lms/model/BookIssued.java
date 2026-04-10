@@ -1,7 +1,6 @@
 package com.harsh.lms.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
