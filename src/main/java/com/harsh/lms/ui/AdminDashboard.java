@@ -1,13 +1,10 @@
 package com.harsh.lms.ui;
 
-
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
-import com.harsh.lms.exception.InvalidBookException;
-import com.harsh.lms.exception.LibraryHasNoMembersException;
-import com.harsh.lms.exception.MemberNotFoundException;
+import com.harsh.lms.exception.*;
 import com.harsh.lms.model.Admin;
 import com.harsh.lms.model.Book;
 import com.harsh.lms.model.Member;
@@ -157,10 +154,12 @@ public class AdminDashboard {
                 Book book = new Book(bookId,title,author,totalQty);
                 try {
                     bookService.addNewBook(book);
-                } catch (RuntimeException e) {
+                    System.out.println("✅ Book added successfully!");
+                } catch (BookAlreadyExistsException e) {
                     System.out.println("📕 " + e.getMessage() + " ❌");
+                } catch (InvalidBookStockException e) {
+                    System.out.println("\uD83D\uDEAB\uD83D\uDCD6 " + e.getMessage());
                 }
-                System.out.println("✅ Book added successfully!");
                 break;
 
             case 6:

@@ -172,8 +172,11 @@ public class BookService {
     }
 
     public void addNewBook(Book book){
+        if (book.getAvailableQty() <= 0) {
+            throw new InvalidBookStockException("Book addition failed — invalid stock value.");
+        }
         if (bookRepo.existsById(book.getBookId())) {
-            throw new RuntimeException("Book already exists with this ID!");
+            throw new BookAlreadyExistsException("Book already exists with this ID!");
         }
         bookRepo.save(book);
     }
