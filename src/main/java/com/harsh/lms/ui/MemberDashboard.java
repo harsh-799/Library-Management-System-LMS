@@ -29,7 +29,7 @@ public class MemberDashboard {
     }
 
     public String getGreeting(){
-        LocalTime lt = LocalTime.of(18,00,00);
+        LocalTime lt = LocalTime.now();
         int currTime = lt.getHour();
 
         if (currTime >= 9 && currTime < 12){
