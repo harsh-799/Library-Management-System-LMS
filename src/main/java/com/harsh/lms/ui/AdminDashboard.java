@@ -68,20 +68,6 @@ public class AdminDashboard {
         int choice = sc.nextInt();
         switch(choice){
 
-            case 2:
-                System.out.print("Enter the memberID to be deleted: ");
-                int memberId = sc.nextInt();
-                sc.nextLine();
-
-                try {
-                    memberService.removeMember(memberId);
-                    System.out.println("\uD83D\uDDD1 Member with MemberID:  " + memberId+ " is deleted successfully.");
-                } catch (MemberNotFoundException e) {
-                    System.out.println("❌ " + e.getMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
 
             case 3:
                 try {

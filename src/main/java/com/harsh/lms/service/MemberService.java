@@ -3,10 +3,10 @@ package com.harsh.lms.service;
 import com.harsh.lms.dto.GetMemberResponse;
 import com.harsh.lms.dto.RegisterMemberRequest;
 import com.harsh.lms.dto.RegisterMemberResponse;
+import com.harsh.lms.dto.DeleteMemberResponse;
 import com.harsh.lms.exception.BookIssuedNotFoundException;
 import com.harsh.lms.exception.IncorrectPasswordException;
 import com.harsh.lms.exception.LibraryHasNoMembersException;
-import com.harsh.lms.exception.MemberNotFoundException;
 import com.harsh.lms.model.BookIssued;
 import com.harsh.lms.model.Member;
 import com.harsh.lms.model.MemberCredentials;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +35,26 @@ public class MemberService {
         this.bookIssuedRepository = bookIssuedRepository;
     }
 
-    public void removeMember(int memberId){
-        if (memberRepo.existsById(memberId)) {
-            memberRepo.deleteById(memberId);
+    public DeleteMemberResponse deleteMember(int memberId){
+
+        Optional<Member> memberRecord = memberRepo.findById(memberId);
+        DeleteMemberResponse deleteMemberResponse;
+
+        if (memberRecord.isPresent()) {
+            Member memberEntity = memberRecord.get();
+            memberRepo.delete(memberEntity);
+            deleteMemberResponse = new DeleteMemberResponse();
+            deleteMemberResponse.setSuccess(true);
+            deleteMemberResponse.setMessage("Member Deleted Successfully");
+            deleteMemberResponse.setMemberId(memberEntity.getMemberId());
+            deleteMemberResponse.setName(memberEntity.getFullName());
+            return deleteMemberResponse;
         } else {
-            throw new MemberNotFoundException();
+            // throw new MemberNotFoundException();
+            deleteMemberResponse = new DeleteMemberResponse();
+            deleteMemberResponse.setSuccess(false);
+            deleteMemberResponse.setMessage("No Member Found to delete");
+            return deleteMemberResponse;
         }
     }
 

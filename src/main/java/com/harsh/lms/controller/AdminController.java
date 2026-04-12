@@ -3,6 +3,7 @@ package com.harsh.lms.controller;
 import com.harsh.lms.dto.GetMemberResponse;
 import com.harsh.lms.dto.RegisterMemberRequest;
 import com.harsh.lms.dto.RegisterMemberResponse;
+import com.harsh.lms.dto.DeleteMemberResponse;
 import com.harsh.lms.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,11 @@ public class AdminController {
     @PostMapping("/member")
     public RegisterMemberResponse createNewMember(@RequestBody RegisterMemberRequest registerMemberRequest) {
         return memberService.addMember(registerMemberRequest);
+    }
+
+    @DeleteMapping("/member/{id}")
+    public DeleteMemberResponse deleteMemberById(@PathVariable(name = "id") int memberId) {
+        return memberService.deleteMember(memberId);
     }
 
     @GetMapping("/member/{id}")
