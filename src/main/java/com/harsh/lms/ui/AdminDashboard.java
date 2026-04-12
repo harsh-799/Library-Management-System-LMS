@@ -67,38 +67,6 @@ public class AdminDashboard {
         showMenu();
         int choice = sc.nextInt();
         switch(choice){
-            case 1:
-                System.out.println("\n👤 Creating New Member");
-                System.out.println("----------------------------");
-                sc.nextLine();
-                System.out.print("Enter Full Name: ");
-                String fullName = sc.nextLine();
-
-                System.out.print("Enter Username: ");
-                String userName = sc.nextLine();
-                System.out.print("Enter Password: ");
-                String password = sc.next();
-
-                MemberCredentials memberCredentials = new MemberCredentials();
-                Member member = new Member();
-
-                memberCredentials.setUsername(userName);
-                memberCredentials.setPassword(password);
-
-                member.setFullName(fullName);
-
-                memberCredentials.setMember(member);
-                member.setMemberCredentials(memberCredentials);
-
-                try {
-                    memberService.addMember(member);
-                    System.out.println("✅ Member created successfully!\n Below are the credentials: ");
-                    System.out.println("username : " + member.getMemberCredentials().getUsername());
-                    System.out.println("password : " + member.getMemberCredentials().getPassword());
-                } catch (RuntimeException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
 
             case 2:
                 System.out.print("Enter the memberID to be deleted: ");
