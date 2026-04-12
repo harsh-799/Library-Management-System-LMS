@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 public class AdminDashboard {
 
     private final MemberService memberService;
-    private final BookService bookService;
     private final MemberDashboard memberDashboard;
     private final BookDashboard bookDashboard;
     private final Scanner sc = new Scanner(System.in);
@@ -27,7 +26,7 @@ public class AdminDashboard {
     @Autowired
     public AdminDashboard(MemberService memberService, BookService bookService, MemberDashboard memberDashboard, BookDashboard bookDashboard) {
         this.memberService = memberService;
-        this.bookService = bookService;
+
         this.memberDashboard = memberDashboard;
         this.bookDashboard = bookDashboard;
     }
@@ -68,49 +67,25 @@ public class AdminDashboard {
         int choice = sc.nextInt();
         switch(choice){
 
-            case 5:
-                System.out.println("\n📚 Adding New Book");
-                System.out.println("----------------------------");
-                System.out.print("Enter BookID: ");
-                int bookId = sc.nextInt();
-                sc.nextLine();
-                System.out.print("Enter Title: ");
-                String title = sc.nextLine();
-                System.out.print("Enter Author: ");
-                String author = sc.nextLine();
-                System.out.print("Enter Total Qty: ");
-                int totalQty = sc.nextInt();
+            // case 6:
+            //     System.out.print("Enter BookID to be Removed: ");
+            //     int bookIdForRemoving = sc.nextInt();
+            //     try {
+            //         bookService.removeBook(bookIdForRemoving);
+            //         System.out.println("Book with BookID "+bookIdForRemoving+" removed from DB..");
+            //     } catch (InvalidBookException e) {
+            //         System.out.println("❌ " + e.getMessage());
+            //     }
+            //     break;
 
-                Book book = new Book(bookId,title,author,totalQty);
-                try {
-                    bookService.addNewBook(book);
-                    System.out.println("✅ Book added successfully!");
-                } catch (BookAlreadyExistsException e) {
-                    System.out.println("📕 " + e.getMessage() + " ❌");
-                } catch (InvalidBookStockException e) {
-                    System.out.println("\uD83D\uDEAB\uD83D\uDCD6 " + e.getMessage());
-                }
-                break;
-
-            case 6:
-                System.out.print("Enter BookID to be Removed: ");
-                int bookIdForRemoving = sc.nextInt();
-                try {
-                    bookService.removeBook(bookIdForRemoving);
-                    System.out.println("Book with BookID "+bookIdForRemoving+" removed from DB..");
-                } catch (InvalidBookException e) {
-                    System.out.println("❌ " + e.getMessage());
-                }
-                break;
-
-            case 7:
-                try {
-                    List<Book> allBooks = bookService.viewAllBooks(admin.getRole());
-                    allBooks.forEach(b -> bookDashboard.bookDetailsPrinterAdmin(b.getBookId(), b.getTitle(), b.getAuthor(), b.getTotalQty(), b.getAvailableQty()));
-                } catch (RuntimeException e) {
-                    System.out.println("📚 " + e.getMessage() + " ❌");
-                }
-                break;
+            // case 7:
+            //     try {
+            //         List<Book> allBooks = bookService.viewAllBooks(admin.getRole());
+            //         allBooks.forEach(b -> bookDashboard.bookDetailsPrinterAdmin(b.getBookId(), b.getTitle(), b.getAuthor(), b.getTotalQty(), b.getAvailableQty()));
+            //     } catch (RuntimeException e) {
+            //         System.out.println("📚 " + e.getMessage() + " ❌");
+            //     }
+            //     break;
 
             case 8:
                 return true;

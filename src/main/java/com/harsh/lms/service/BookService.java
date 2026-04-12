@@ -1,5 +1,8 @@
 package com.harsh.lms.service;
 
+import com.harsh.lms.dto.DeleteBookResponse;
+import com.harsh.lms.dto.RegisterBookRequest;
+import com.harsh.lms.dto.RegisterBookResponse;
 import com.harsh.lms.exception.*;
 import com.harsh.lms.model.Book;
 import com.harsh.lms.model.BookIssued;
@@ -163,21 +166,52 @@ public class BookService {
         }
     }
 
-    public void removeBook(int bookId){
-        if (bookRepo.existsById(bookId)) {
-            bookRepo.deleteById(bookId);
+    public DeleteBookResponse removeBook(int bookId){
+
+        Optional<Book> bookRecord = bookRepo.findById(bookId);
+        DeleteBookResponse deleteBookResponse;
+
+        if (bookRecord.isPresent()) {
+            Book bookEntity = bookRecord.get();
+            bookRepo.delete(bookEntity);
+            deleteBookResponse = new DeleteBookResponse();
+            deleteBookResponse.setStatus(true);
+            deleteBookResponse.setMessage("Book Deleted Successfully");
+            deleteBookResponse.setBookId(bookEntity.getBookId());
+            return deleteBookResponse;
         } else {
-            throw new InvalidBookException();
+            // throw new InvalidBookException();
+            deleteBookResponse = new DeleteBookResponse();
+            deleteBookResponse.setStatus(false);
+            deleteBookResponse.setMessage("Book Not Found");
+            return deleteBookResponse;
         }
     }
 
-    public void addNewBook(Book book){
-        if (book.getAvailableQty() <= 0) {
-            throw new InvalidBookStockException("Book addition failed — invalid stock value.");
+    public RegisterBookResponse addNewBook(RegisterBookRequest newBook){
+
+        RegisterBookResponse registerBookResponse;
+
+        if (newBook.getTotalQty() <= 0) {
+            registerBookResponse = new RegisterBookResponse();
+            registerBookResponse.setStatus(false);
+            registerBookResponse.setMessage("Book addition failed — invalid stock value.");
+            return registerBookResponse;
+            // throw new InvalidBookStockException("Book addition failed — invalid stock value.");
         }
-        if (bookRepo.existsById(book.getBookId())) {
-            throw new BookAlreadyExistsException("Book already exists with this ID!");
+        if (bookRepo.existsById(newBook.getBookId())) {
+            registerBookResponse = new RegisterBookResponse();
+            registerBookResponse.setStatus(false);
+            registerBookResponse.setMessage("Book already exists with this ID!");
+            return registerBookResponse;
+            // throw new BookAlreadyExistsException("Book already exists with this ID!");
         }
+
+        Book book= new Book(newBook.getBookId(), newBook.getBookTitle(), newBook.getBookAuthor(), newBook.getTotalQty());
         bookRepo.save(book);
+        registerBookResponse = new RegisterBookResponse();
+        registerBookResponse.setStatus(true);
+        registerBookResponse.setMessage("Book added Successfully");
+        return registerBookResponse;
     }
 }
