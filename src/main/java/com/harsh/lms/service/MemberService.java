@@ -1,9 +1,6 @@
 package com.harsh.lms.service;
 
-import com.harsh.lms.dto.GetMemberResponse;
-import com.harsh.lms.dto.RegisterMemberRequest;
-import com.harsh.lms.dto.RegisterMemberResponse;
-import com.harsh.lms.dto.DeleteMemberResponse;
+import com.harsh.lms.dto.*;
 import com.harsh.lms.exception.BookIssuedNotFoundException;
 import com.harsh.lms.exception.IncorrectPasswordException;
 import com.harsh.lms.exception.LibraryHasNoMembersException;
@@ -18,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,21 +56,25 @@ public class MemberService {
         }
     }
 
-    @Transactional
-    public List<Member> getAllMembers(){
+    public List<AllMemberResponse> getAllMembers(){
         List<Member> libraryMembers = memberRepo.findAll();
+        List<AllMemberResponse> allMemberResponses = new ArrayList<>();
 
         if (libraryMembers.isEmpty()){
-            throw new LibraryHasNoMembersException();
+            // throw new LibraryHasNoMembersException();
+            return allMemberResponses;
         }
 
-        // Well, It's just a workaround to fix lazyinitException, Will move to DTO soon.
-        for (Member mem : libraryMembers) {
-            mem.getIssuedBooks().size();
-            mem.getMemberCredentials().getUsername();
+        for (Member member : libraryMembers) {
+            AllMemberResponse memberResponse  = new AllMemberResponse();
+            memberResponse.setMemberId(member.getMemberId());
+            memberResponse.setMemberName(member.getFullName());
+            memberResponse.setTotalIssuedBooks(member.getIssuedBooks().size());
+
+            allMemberResponses.add(memberResponse);
         }
 
-        return libraryMembers;
+        return allMemberResponses;
     }
 
     public GetMemberResponse getMemberByID(int memberID){

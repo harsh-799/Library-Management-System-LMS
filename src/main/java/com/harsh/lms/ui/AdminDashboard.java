@@ -68,19 +68,6 @@ public class AdminDashboard {
         int choice = sc.nextInt();
         switch(choice){
 
-
-            case 3:
-                try {
-                    List<Member> libraryMembers = memberService.getAllMembers();
-
-                    libraryMembers.forEach(mem -> memberDashboard.printMemberDetails(mem.getMemberId(), mem.getFullName(), mem.getMemberCredentials().getUsername(), mem.getIssuedBooks().size()));
-                } catch (LibraryHasNoMembersException e) {
-                    System.out.println("📚 " + e.getMessage() + " 😔");
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-                break;
-
             case 5:
                 System.out.println("\n📚 Adding New Book");
                 System.out.println("----------------------------");
