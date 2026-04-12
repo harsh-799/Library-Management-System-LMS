@@ -95,17 +95,6 @@ public class AdminDashboard {
                 }
                 break;
 
-            case 4:
-                System.out.print("Enter the member ID to be Searched: ");
-                int memID = sc.nextInt();
-                try {
-                    Member searchedMember = memberService.getMemberByID(memID);
-                    memberDashboard.printMemberDetails(searchedMember.getMemberId(), searchedMember.getFullName(), searchedMember.getMemberCredentials().getUsername(), searchedMember.getIssuedBooks().size());
-                } catch (RuntimeException e) {
-                    System.out.println("❌ "+ e.getMessage());
-                }
-                break;
-
             case 5:
                 System.out.println("\n📚 Adding New Book");
                 System.out.println("----------------------------");

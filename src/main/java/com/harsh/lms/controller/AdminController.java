@@ -22,5 +22,8 @@ public class AdminController {
         return memberService.addMember(registerMemberRequest);
     }
 
-
+    @GetMapping("/member/{id}")
+    public GetMemberResponse getMemberDetailsById(@PathVariable(name = "id") int memberId) {
+        return memberService.getMemberByID(memberId);
+    }
 }

@@ -61,13 +61,27 @@ public class MemberService {
         return libraryMembers;
     }
 
-    public Member getMemberByID(int memberID){
+    public GetMemberResponse getMemberByID(int memberID){
         Optional<Member> result = memberRepo.findById(memberID);
+
         if (result.isEmpty()){
-            throw new RuntimeException("No member Found with that ID.");
+            // throw new RuntimeException("No member Found with that ID.");
+            GetMemberResponse getMemberResponse = new GetMemberResponse();
+            getMemberResponse.setStatus(false);
+            getMemberResponse.setMessage("No Member Found with that Id");
+            return getMemberResponse;
         }
 
-        return result.get();
+        Member member = result.get();
+
+        GetMemberResponse getMemberResponse = new GetMemberResponse();
+
+        getMemberResponse.setStatus(true);
+        getMemberResponse.setMessage("Member Found Successfully");
+        getMemberResponse.setMemberId(member.getMemberId());
+        getMemberResponse.setMemberName(member.getFullName());
+        getMemberResponse.setIssuedBooks(member.getIssuedBooks());
+        return getMemberResponse;
     }
 
     public Member syncMemberOnLogin(Member member){
