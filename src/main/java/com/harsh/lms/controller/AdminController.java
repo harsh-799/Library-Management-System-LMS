@@ -49,4 +49,14 @@ public class AdminController {
     public DeleteBookResponse deleteBookById(@PathVariable(name = "id") int bookId) {
         return bookService.removeBook(bookId);
     }
+
+    @GetMapping("/book/{id}")
+    public GetBookResponse getBookById(@PathVariable(name = "id") int bookId) {
+        return bookService.viewBookById(bookId);
+    }
+
+    @GetMapping("/books")
+    public List<AllBookResponse> getAllBooks() {
+        return bookService.viewAllBooks();
+    }
 }

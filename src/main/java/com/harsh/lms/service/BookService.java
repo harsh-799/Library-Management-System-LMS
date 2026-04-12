@@ -1,8 +1,6 @@
 package com.harsh.lms.service;
 
-import com.harsh.lms.dto.DeleteBookResponse;
-import com.harsh.lms.dto.RegisterBookRequest;
-import com.harsh.lms.dto.RegisterBookResponse;
+import com.harsh.lms.dto.*;
 import com.harsh.lms.exception.*;
 import com.harsh.lms.model.Book;
 import com.harsh.lms.model.BookIssued;
@@ -12,6 +10,7 @@ import com.harsh.lms.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,14 +155,44 @@ public class BookService {
         throw new InvalidBookException();
     }
 
-    public List<Book> viewAllBooks(String role){
-        List<Book> allBooksOfLibrary = bookRepo.findAll();
+    public GetBookResponse viewBookById(int bookId) {
+        Optional<Book> bookRecord = bookRepo.findById(bookId);
+        GetBookResponse bookResponse = new GetBookResponse();
 
-        if (!allBooksOfLibrary.isEmpty()) {
-            return allBooksOfLibrary;
-        } else {
-            throw new RuntimeException("Library is empty — no books found");
+        if (bookRecord.isPresent()) {
+            Book bookEntity = bookRecord.get();
+            bookResponse.setStatus(true);
+            bookResponse.setMessage("Book Found Successfully");
+            bookResponse.setBookId(bookEntity.getBookId());
+            bookResponse.setTitle(bookEntity.getTitle());
+            bookResponse.setAuthor(bookEntity.getAuthor());
+            bookResponse.setTotalQty(bookEntity.getTotalQty());
+            bookResponse.setAvailableQty(bookEntity.getAvailableQty());
+
+            return bookResponse;
         }
+
+        bookResponse.setStatus(false);
+        bookResponse.setMessage("Book Not Found");
+        return bookResponse;
+    }
+
+    public List<AllBookResponse> viewAllBooks(){
+        List<Book> allBooksOfLibrary = bookRepo.findAll();
+        List<AllBookResponse> allBookResponses = new ArrayList<>();
+
+        for (Book book : allBooksOfLibrary) {
+            AllBookResponse bookResponse = new AllBookResponse();
+            bookResponse.setBookId(book.getBookId());
+            bookResponse.setTitle(book.getTitle());
+            bookResponse.setAuthor(book.getAuthor());
+            bookResponse.setTotalQty(book.getTotalQty());
+            bookResponse.setAvailableQty(book.getAvailableQty());
+
+            allBookResponses.add(bookResponse);
+        }
+
+        return allBookResponses;
     }
 
     public DeleteBookResponse removeBook(int bookId){
