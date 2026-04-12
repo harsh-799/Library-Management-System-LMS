@@ -5,10 +5,11 @@ import com.harsh.lms.model.MemberCredentials;
 import com.harsh.lms.repository.AdminRepository;
 import com.harsh.lms.repository.MemberCredentialsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import java.util.Optional;
+import com.harsh.lms.dto.LoginResponse;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class AuthService {
 
     private AdminRepository adminRepo;
@@ -20,30 +21,41 @@ public class AuthService {
         this.memberRepo = memberRepo;
     }
 
-    public boolean hasAdminRecords() {
-        return (!adminRepo.findAll().isEmpty());
-    }
-
     public void setAdminDetails(Admin admin){
         adminRepo.save(admin);
 
     }
 
-    public Object authenticateUser(String username, String password){
+    public LoginResponse authenticateUser(String username, String password){
         // Checking the Admin Credentials
-        Optional<Admin> adminRecords = adminRepo.findById(username);
 
-        if (adminRecords.isPresent() && adminRecords.get().getUsername().equals(username) && adminRecords.get().getPassword().equals(password)){
-            return adminRecords.get();
+        Optional<Admin> adminRecords = adminRepo.findByUsername(username);
+
+        if (adminRecords.isPresent() && adminRecords.get().getPassword().equals(password)){
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setSuccess(true);
+            loginResponse.setUserId(adminRecords.get().getAdminId());
+            loginResponse.setUsername(adminRecords.get().getUsername());
+            loginResponse.setRole(adminRecords.get().getRole());
+            return loginResponse;
         }
 
         // Checking the Member Credentials
         Optional<MemberCredentials> memberRecords = memberRepo.findById(username);
 
-        if (memberRecords.isPresent() && memberRecords.get().getUsername().equals(username) && memberRecords.get().getPassword().equals(password)) {
-            return memberRecords.get().getMember();
+        if (memberRecords.isPresent() && memberRecords.get().getPassword().equals(password)) {
+            LoginResponse loginResponse = new LoginResponse();
+            System.out.println("Entering member");
+            loginResponse.setSuccess(true);
+            loginResponse.setUserId(memberRecords.get().getMember().getMemberId());
+            loginResponse.setUsername(memberRecords.get().getUsername());
+            loginResponse.setRole(memberRecords.get().getMember().getRole());
+            return loginResponse;
         }
 
-        return null;
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setSuccess(false);
+        loginResponse.setMessage("Invalid Credentials");
+        return loginResponse;
     }
 }

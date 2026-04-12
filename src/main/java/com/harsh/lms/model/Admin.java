@@ -5,12 +5,22 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Admin {
+
     @Id
+    private int adminId;
     private String username;
     private String password;
     private final String role = "ADMIN";
 
     public Admin(){
+    }
+
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
     }
 
     public String getUsername() {
