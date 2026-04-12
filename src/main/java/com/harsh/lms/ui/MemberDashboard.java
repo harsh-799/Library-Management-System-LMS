@@ -67,52 +67,6 @@ public class MemberDashboard {
         System.out.print("Enter choice: ");
     }
 
-    private void searchBook(int searchChoice){
-        switch(searchChoice){
-            case 1:
-                System.out.print("Enter the BookID: ");
-                try {
-                    int bookId = sc.nextInt();
-                    Book foundBook = bookService.searchBookById(bookId);
-                    bookDashboard.bookDetailsPrinterMember(foundBook.getBookId(), foundBook.getTitle(), foundBook.getAuthor(), foundBook.getTotalQty(), foundBook.getAvailableQty());
-                } catch (InputMismatchException e){
-                    System.out.println("Invalid input, Please enter Digit");
-                } catch (InvalidBookException e) {
-                    System.out.println("❌ "+e.getMessage());
-                }
-                break;
-
-            case 2:
-                System.out.println("Enter the Author Name: ");
-                sc.nextLine();
-                String authorName = sc.nextLine();
-                try {
-                    List<Book> foundBookByAuthorName = bookService.searchBookByAuthor(authorName);
-                    foundBookByAuthorName.forEach(x -> bookDashboard.bookDetailsPrinterMember(x.getBookId(), x.getTitle(), x.getAuthor(), x.getTotalQty(), x.getAvailableQty()));
-
-                } catch (BookNotFoundByAuthorException e) {
-                    System.out.println("🔍 "+ e.getMessage() + " 📚");
-                }
-                break;
-
-            case 3:
-                System.out.print("Enter the Book Title: ");
-                String bookTitle = sc.nextLine();
-                try {
-                    List<Book> foundBookByTitle = bookService.searchBookByTitle(bookTitle);
-                    foundBookByTitle.forEach(x -> bookDashboard.bookDetailsPrinterMember(x.getBookId(), x.getTitle(), x.getAuthor(), x.getTotalQty(), x.getAvailableQty()));
-                } catch (BookNotFoundByTitleException e) {
-                    System.out.println("🔍 "+ e.getMessage() + " 📚");
-                }
-
-                break;
-
-            default:
-                System.out.println("Invalid Option, Select Between (1 - 3)");
-                break;
-        }
-    }
-
     public void issuesPrinter(Book book){
         System.out.println("BookID: " + book.getBookId());
         System.out.println("Book Title: " + book.getTitle());
@@ -142,14 +96,6 @@ public class MemberDashboard {
         }
 
         switch (choices){
-
-            case 2:
-                showSearchBookMenu();
-                int searchChoice = sc.nextInt();
-                sc.nextLine();
-                System.out.println();
-                searchBook(searchChoice);
-                break;
 
             case 3:
                 System.out.println("\n📥 Issue a Book");

@@ -32,31 +32,79 @@ public class BookService {
         this.bookIssuedRepository = bookIssuedRepository;
     }
 
-    public Book searchBookById(int bookId){
+    public GetBookMemberResponse searchBookById(int bookId){
         Optional<Book> searchedBook = bookRepo.findById(bookId);
+        GetBookMemberResponse getBookMemberResponse = new GetBookMemberResponse();
 
         if (searchedBook.isPresent()){
-            return searchedBook.get();
+            Book book = searchedBook.get();
+            getBookMemberResponse.setSuccess(true);
+            getBookMemberResponse.setMessage("Book Found Successfully.");
+            getBookMemberResponse.setBookId(book.getBookId());
+            getBookMemberResponse.setAuthor(book.getAuthor());
+            getBookMemberResponse.setTitle(book.getTitle());
+
+            if (book.getAvailableQty() > 0) getBookMemberResponse.setStatus("Available");
+            else getBookMemberResponse.setStatus("Out Of Stock!");
+
+            return getBookMemberResponse;
         }
-        throw new InvalidBookException();
+
+        // throw new InvalidBookException();
+        getBookMemberResponse.setSuccess(false);
+        getBookMemberResponse.setMessage("Book Not Found");
+        return getBookMemberResponse;
     }
 
-    public List<Book> searchBookByAuthor(String authorName){
+    public List<AllBooksMemberResponse> searchBookByAuthor(String authorName) {
+
         List<Book> booksByAuthor = bookRepo.findByAuthor(authorName);
-        
+        List<AllBooksMemberResponse> allBookMemberResponses = new ArrayList<>();
+
         if (!booksByAuthor.isEmpty()) {
-            return booksByAuthor;
+            for (Book book : booksByAuthor) {
+
+                AllBooksMemberResponse bookMemberResponse = new AllBooksMemberResponse();
+
+                bookMemberResponse.setBookId(book.getBookId());
+                bookMemberResponse.setTitle(book.getTitle());
+                bookMemberResponse.setAuthor(book.getAuthor());
+
+                int availQty = book.getAvailableQty();
+                if (availQty > 0) bookMemberResponse.setStatus("Available");
+                else bookMemberResponse.setStatus("Out Of Stock!");
+
+                allBookMemberResponses.add(bookMemberResponse);
+            }
         }
-        throw new BookNotFoundByAuthorException("No Book with Author Name: " + authorName + " is found");
+
+        return allBookMemberResponses;
     }
 
-    public List<Book> searchBookByTitle(String bookTitle){
-        List<Book> booksByTitle = bookRepo.findByTitle(bookTitle);
-        
-        if (!booksByTitle.isEmpty()){
-            return booksByTitle;
+
+    public List<AllBooksMemberResponse> searchBookByTitle(String bookTitle){
+        List<Book> booksByTitle = bookRepo.findAllByTitleContaining(bookTitle);
+        List<AllBooksMemberResponse> allBookMemberResponses = new ArrayList<>();
+
+        if (!booksByTitle.isEmpty()) {
+            for (Book book : booksByTitle) {
+
+                AllBooksMemberResponse bookMemberResponse = new AllBooksMemberResponse();
+
+                bookMemberResponse.setBookId(book.getBookId());
+                bookMemberResponse.setTitle(book.getTitle());
+                bookMemberResponse.setAuthor(book.getAuthor());
+
+                int availQty = book.getAvailableQty();
+                if (availQty > 0) bookMemberResponse.setStatus("Available");
+                else bookMemberResponse.setStatus("Out Of Stock!");
+
+                allBookMemberResponses.add(bookMemberResponse);
+            }
         }
-        throw new BookNotFoundByTitleException("No Book with Book Title: " + bookTitle + " is found");
+
+        return allBookMemberResponses;
+
     }
 
     private boolean hasReachedIssueLimit(List<BookIssued> memberIssuedBook) {
