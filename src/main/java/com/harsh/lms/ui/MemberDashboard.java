@@ -142,15 +142,6 @@ public class MemberDashboard {
         }
 
         switch (choices){
-            // case 1:
-            //     try {
-            //         List<Book> allBooks = bookService.viewAllBooks(member.getRole());
-            //         System.out.println("Below are the Available books in library: ");
-            //         allBooks.forEach(b -> bookDashboard.bookDetailsPrinterMember(b.getBookId(), b.getTitle(), b.getAuthor(), b.getTotalQty(), b.getAvailableQty()));
-            //     } catch (RuntimeException e) {
-            //         System.out.println("📚 " + e.getMessage() + " ❌");
-            //     }
-            //     break;
 
             case 2:
                 showSearchBookMenu();

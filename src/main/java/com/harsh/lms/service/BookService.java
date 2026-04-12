@@ -177,7 +177,7 @@ public class BookService {
         return bookResponse;
     }
 
-    public List<AllBookResponse> viewAllBooks(){
+    public List<AllBookResponse> viewAllBooksAdmin(){
         List<Book> allBooksOfLibrary = bookRepo.findAll();
         List<AllBookResponse> allBookResponses = new ArrayList<>();
 
@@ -193,6 +193,26 @@ public class BookService {
         }
 
         return allBookResponses;
+    }
+
+    public List<AllBooksMemberResponse> viewAllBooksMember() {
+        List<Book> allBooksOfLibrary = bookRepo.findAll();
+        List<AllBooksMemberResponse> allBookMemberResponses = new ArrayList<>();
+
+        for (Book book : allBooksOfLibrary) {
+            AllBooksMemberResponse bookMemberResponse = new AllBooksMemberResponse();
+            bookMemberResponse.setBookId(book.getBookId());
+            bookMemberResponse.setTitle(book.getTitle());
+            bookMemberResponse.setAuthor(book.getAuthor());
+
+            int availQty = book.getAvailableQty();
+            if (availQty > 0) bookMemberResponse.setStatus("Available");
+            else bookMemberResponse.setStatus("Out Of Stock!");
+
+            allBookMemberResponses.add(bookMemberResponse);
+        }
+
+        return allBookMemberResponses;
     }
 
     public DeleteBookResponse removeBook(int bookId){

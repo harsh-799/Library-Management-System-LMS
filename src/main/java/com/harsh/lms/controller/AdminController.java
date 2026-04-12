@@ -55,8 +55,8 @@ public class AdminController {
         return bookService.viewBookById(bookId);
     }
 
-    @GetMapping("/books")
+    @GetMapping("/admin/books")
     public List<AllBookResponse> getAllBooks() {
-        return bookService.viewAllBooks();
+        return bookService.viewAllBooksAdmin();
     }
 }
