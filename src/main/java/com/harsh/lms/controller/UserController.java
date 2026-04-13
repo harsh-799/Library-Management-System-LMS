@@ -2,6 +2,7 @@ package com.harsh.lms.controller;
 
 import com.harsh.lms.dto.*;
 import com.harsh.lms.service.BookService;
+import com.harsh.lms.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,12 @@ import java.util.List;
 public class UserController {
 
     private BookService bookService;
+    private MemberService memberService;
 
     @Autowired
-    public UserController(BookService bookService) {
+    public UserController(BookService bookService, MemberService memberService) {
         this.bookService = bookService;
+        this.memberService = memberService;
     }
 
     @GetMapping("/member/books")
@@ -45,6 +48,11 @@ public class UserController {
     @PostMapping("member/return")
     public ReturnBookResponse returnBook(@RequestBody ReturnBookRequest returnBookRequest) {
         return bookService.returnBook(returnBookRequest);
+    }
+
+    @GetMapping("/member/issues/{id}")
+    public MemberIssuedBookResponse getIssuedBooks(@PathVariable(name = "id") int memberId) {
+        return memberService.getAllIssued(memberId);
     }
 
 

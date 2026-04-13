@@ -112,12 +112,41 @@ public class MemberService {
         return member;
     }
 
-    public List<BookIssued> getAllIssued(Member member) {
-        if (member.getIssuedBooks().isEmpty()) {
-            throw new BookIssuedNotFoundException();
+    public MemberIssuedBookResponse getAllIssued(int memberId) {
+
+        MemberIssuedBookResponse memberIssuedBookResponse;
+
+        Optional<Member> memberRecords = memberRepo.findById(memberId);
+
+        if (memberRecords.isEmpty()) {
+            memberIssuedBookResponse = new MemberIssuedBookResponse();
+            memberIssuedBookResponse.setSuccess(false);
+            memberIssuedBookResponse.setMessage("Incorrect Id. No Member Found");
+            return memberIssuedBookResponse;
         }
 
-        return member.getIssuedBooks();
+        Member member = memberRecords.get();
+
+        if (member.getIssuedBooks().isEmpty()) {
+            memberIssuedBookResponse = new MemberIssuedBookResponse();
+            memberIssuedBookResponse.setSuccess(false);
+            memberIssuedBookResponse.setMessage("No Books Issued to this Member");
+            return memberIssuedBookResponse;
+        }
+
+        memberIssuedBookResponse = new MemberIssuedBookResponse();
+        List<BookIssued> bookIssuedList = member.getIssuedBooks();
+
+        memberIssuedBookResponse.setSuccess(true);
+        memberIssuedBookResponse.setMessage("Book details retrived Successfully.");
+        memberIssuedBookResponse.setTotalIssuedBooks(bookIssuedList.size());
+
+        List<Integer> bookIssuedIds = new ArrayList<>();
+        bookIssuedList.forEach(b -> bookIssuedIds.add(b.getBook().getBookId()));
+
+        memberIssuedBookResponse.setIssuedBooksIds(bookIssuedIds);
+
+        return memberIssuedBookResponse;
     }
 
     public RegisterMemberResponse addMember(RegisterMemberRequest newMember) {

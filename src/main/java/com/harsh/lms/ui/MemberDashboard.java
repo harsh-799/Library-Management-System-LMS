@@ -97,18 +97,6 @@ public class MemberDashboard {
 
         switch (choices){
 
-            case 5:
-                System.out.println("\n📚 Your Issued Books:");
-                System.out.println("---------------------------------------");
-
-                try {
-                    List<BookIssued> bookIssuedList =  memberService.getAllIssued(member);
-                    bookIssuedList.forEach(b -> issuesPrinter(b.getBook()));
-                } catch (BookIssuedNotFoundException e) {
-                    System.out.println("📚 " + e.getMessage() + " 🙅‍♂️");
-                }
-                // System.out.println("📭 You have not issued any books.");
-                break;
 
             case 6:
                 System.out.println("\n👤 Your Profile");
