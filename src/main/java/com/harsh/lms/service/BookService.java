@@ -1,7 +1,6 @@
 package com.harsh.lms.service;
 
 import com.harsh.lms.dto.*;
-import com.harsh.lms.exception.*;
 import com.harsh.lms.model.Book;
 import com.harsh.lms.model.BookIssued;
 import com.harsh.lms.model.Member;
@@ -180,6 +179,8 @@ public class BookService {
     
     private IssueBookResponse createBookIssueEntry(Book bookToIssue, Member member) {
 
+        IssueBookResponse issueBookResponse;
+
         LocalDate todaysDate = LocalDate.now();
         LocalDate returnDate = todaysDate.plusDays(7);
 
@@ -195,53 +196,102 @@ public class BookService {
         memberRepository.save(member);
         bookIssuedRepository.save(bookIssued);
 
-        return updateBookStock(bookToIssue, BookIssueStatus.ISSUED);
-    }
-
-    public void returnBook(int bookId, Member member) {
-        Optional<Book> bookToReturn = bookRepo.findById(bookId);
-
-        if (member.getIssuedBooks().isEmpty()) {
-            throw new BookIssuedNotFoundException();
-        }
-
-        if (!bookToReturn.isPresent()) {
-            throw new InvalidBookException();
-        }
-
-        createBookReturnEntry(bookToReturn.get(), member);
-    }
-
-    public void createBookReturnEntry(Book book, Member member) {
-        Optional<BookIssued> bookToReturn = bookIssuedRepository.findByBook_BookIdAndMember_MemberId(book.getBookId(), member.getMemberId());
-
-        if (bookToReturn.isPresent()) {
-            bookIssuedRepository.deleteById(bookToReturn.get().getIssueId());
-            List<BookIssued> updatedBooksIssuedList = bookIssuedRepository.findAllByMember_MemberId(member.getMemberId());
-            member.setIssuedBooks(updatedBooksIssuedList);
-            updateBookStock(book, BookIssueStatus.RETURNED);
-        }
-    }
-
-    private IssueBookResponse updateBookStock(Book book, BookIssueStatus status) {
-        IssueBookResponse issueBookResponse;
-        if (status.equals(BookIssueStatus.ISSUED)) {
-            book.setAvailableQty(book.getAvailableQty() - 1);
-            bookRepo.save(book);
+        if (updateBookStock(bookToIssue, BookIssueStatus.ISSUED)) {
             issueBookResponse = new IssueBookResponse();
             issueBookResponse.setSuccess(true);
             issueBookResponse.setMessage("Book Issued Successfully");
-            issueBookResponse.setBookId(book.getBookId());
+            issueBookResponse.setBookId(bookToIssue.getBookId());
             return issueBookResponse;
-        } else if (status.equals(BookIssueStatus.RETURNED)) {
-            book.setAvailableQty(book.getAvailableQty() + 1);
-            bookRepo.save(book);
         }
 
         issueBookResponse = new IssueBookResponse();
         issueBookResponse.setSuccess(false);
         issueBookResponse.setMessage("Error! In Updating Book Stocks");
         return issueBookResponse;
+    }
+
+    public ReturnBookResponse returnBook(ReturnBookRequest returnBookRequest) {
+        int bookId = returnBookRequest.getBookId();
+        Optional<Book> bookRecords = bookRepo.findById(bookId);
+
+        ReturnBookResponse returnBookResponse;
+
+        if (bookRecords.isEmpty()) {
+            returnBookResponse = new ReturnBookResponse();
+            returnBookResponse.setSuccess(false);
+            returnBookResponse.setMessage("Invalid Book Id");
+            return returnBookResponse;
+        }
+
+        Book book = bookRecords.get();
+        int memberId = returnBookRequest.getMemberId();
+        Optional<Member> memberRecords = memberRepository.findById(memberId);
+
+        Member member;
+
+        if (memberRecords.isEmpty()) {
+            returnBookResponse = new ReturnBookResponse();
+            returnBookResponse.setSuccess(false);
+            returnBookResponse.setMessage("Invalid Member Id");
+            return returnBookResponse;
+        }
+
+        member = memberRecords.get();
+
+        if (member.getIssuedBooks().isEmpty()) {
+            returnBookResponse = new ReturnBookResponse();
+            returnBookResponse.setSuccess(false);
+            returnBookResponse.setMessage("No Book Issued For This Member");
+            return returnBookResponse;
+        }
+
+        return createBookReturnEntry(book, member);
+    }
+
+    public ReturnBookResponse createBookReturnEntry(Book book, Member member) {
+        Optional<BookIssued> bookToReturn = bookIssuedRepository.findByBook_BookIdAndMember_MemberId(book.getBookId(), member.getMemberId());
+        ReturnBookResponse returnBookResponse;
+
+        if (bookToReturn.isPresent()) {
+            bookIssuedRepository.deleteById(bookToReturn.get().getIssueId());
+            List<BookIssued> updatedBooksIssuedList = bookIssuedRepository.findAllByMember_MemberId(member.getMemberId());
+            member.setIssuedBooks(updatedBooksIssuedList);
+
+            if (updateBookStock(book, BookIssueStatus.RETURNED)) {
+                returnBookResponse = new ReturnBookResponse();
+                returnBookResponse.setSuccess(true);
+                returnBookResponse.setBookId(book.getBookId());
+                returnBookResponse.setMessage("Book Returned Successfully.");
+                return returnBookResponse;
+            }
+        }
+
+        returnBookResponse = new ReturnBookResponse();
+        returnBookResponse.setSuccess(false);
+        returnBookResponse.setMessage("Error! In Updating Book Stocks");
+        return returnBookResponse;
+    }
+
+    private boolean updateBookStock(Book book, BookIssueStatus status) {
+
+        if (status.equals(BookIssueStatus.ISSUED)) {
+            book.setAvailableQty(book.getAvailableQty() - 1);
+            try {
+                bookRepo.save(book);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else if (status.equals(BookIssueStatus.RETURNED)) {
+            book.setAvailableQty(book.getAvailableQty() + 1);
+            try {
+                bookRepo.save(book);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
     }
 
     public GetBookResponse viewBookById(int bookId) {

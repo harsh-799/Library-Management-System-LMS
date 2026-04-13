@@ -1,9 +1,6 @@
 package com.harsh.lms.controller;
 
-import com.harsh.lms.dto.AllBooksMemberResponse;
-import com.harsh.lms.dto.GetBookMemberResponse;
-import com.harsh.lms.dto.IssueBookRequest;
-import com.harsh.lms.dto.IssueBookResponse;
+import com.harsh.lms.dto.*;
 import com.harsh.lms.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +40,11 @@ public class UserController {
     @PostMapping("member/issue")
     public IssueBookResponse issueBook(@RequestBody IssueBookRequest bookIssueRequest) {
         return bookService.issueBook(bookIssueRequest);
+    }
+
+    @PostMapping("member/return")
+    public ReturnBookResponse returnBook(@RequestBody ReturnBookRequest returnBookRequest) {
+        return bookService.returnBook(returnBookRequest);
     }
 
 

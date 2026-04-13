@@ -97,22 +97,6 @@ public class MemberDashboard {
 
         switch (choices){
 
-            case 4:
-                System.out.println("\n📤 Return a Book");
-
-                System.out.print("📘 Enter Book ID: ");
-                int bookIdForReturn = sc.nextInt();
-
-                try {
-                    bookService.returnBook(bookIdForReturn, member);
-                    System.out.println("✅ Book returned successfully!");
-                } catch (BookIssuedNotFoundException e) {
-                    System.out.println("📚 " + e.getMessage() + " 🙅‍♂️");
-                } catch (InvalidBookException e) {
-                    System.out.println("❌ "+ e.getMessage());
-                }
-                break;
-
             case 5:
                 System.out.println("\n📚 Your Issued Books:");
                 System.out.println("---------------------------------------");
