@@ -9,15 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class AdminController {
+public class MemberController {
 
     private MemberService memberService;
-    private final BookService bookService;
 
     @Autowired
-    public AdminController(MemberService memberService, BookService bookService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.bookService = bookService;
     }
 
     @PostMapping("/member")
@@ -40,23 +38,13 @@ public class AdminController {
         return memberService.getMemberByID(memberId);
     }
 
-    @PostMapping("/book")
-    public RegisterBookResponse addBook(@RequestBody RegisterBookRequest registerBookRequest) {
-        return bookService.addNewBook(registerBookRequest);
+    @GetMapping("/member/issues/{id}")
+    public MemberIssuedBookResponse getIssuedBooks(@PathVariable(name = "id") int memberId) {
+        return memberService.getAllIssued(memberId);
     }
-
-    @DeleteMapping("/book/{id}")
-    public DeleteBookResponse deleteBookById(@PathVariable(name = "id") int bookId) {
-        return bookService.removeBook(bookId);
-    }
-
-    @GetMapping("/book/{id}")
-    public GetBookResponse getBookById(@PathVariable(name = "id") int bookId) {
-        return bookService.viewBookById(bookId);
-    }
-
-    @GetMapping("/admin/books")
-    public List<AllBookResponse> getAllBooks() {
-        return bookService.viewAllBooksAdmin();
+    
+    @PutMapping("/member/password")
+    public ChangeMemberPasswordResponse changeMemberPassword(@RequestBody ChangeMemberPasswordRequest changeMemberPasswordRequest) {
+        return memberService.updatePassword(changeMemberPasswordRequest);
     }
 }

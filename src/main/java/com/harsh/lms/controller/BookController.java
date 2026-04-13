@@ -2,31 +2,47 @@ package com.harsh.lms.controller;
 
 import com.harsh.lms.dto.*;
 import com.harsh.lms.service.BookService;
-import com.harsh.lms.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-public class UserController {
+public class BookController {
 
-    private BookService bookService;
-    private MemberService memberService;
+    private final BookService bookService;
 
     @Autowired
-    public UserController(BookService bookService, MemberService memberService) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.memberService = memberService;
+    }
+
+    @PostMapping("/book")
+    public RegisterBookResponse addBook(@RequestBody RegisterBookRequest registerBookRequest) {
+        return bookService.addNewBook(registerBookRequest);
+    }
+
+    @DeleteMapping("/book/{id}")
+    public DeleteBookResponse deleteBookById(@PathVariable(name = "id") int bookId) {
+        return bookService.removeBook(bookId);
+    }
+
+    @GetMapping("/book/{id}")
+    public GetBookResponse getBookByIdAdmin(@PathVariable(name = "id") int bookId) {
+        return bookService.viewBookById(bookId);
+    }
+
+    @GetMapping("/books")
+    public List<AllBookResponse> getAllBooksAdmin() {
+        return bookService.viewAllBooksAdmin();
     }
 
     @GetMapping("/member/books")
-    public List<AllBooksMemberResponse> getAllBooks() {
+    public List<AllBooksMemberResponse> getAllBooksMember() {
         return bookService.viewAllBooksMember();
     }
 
     @GetMapping(value="/book/search", params = "bookId")
-    public GetBookMemberResponse getBookById(@RequestParam int bookId) {
+    public GetBookMemberResponse getBookByIdMember(@RequestParam int bookId) {
         return bookService.searchBookById(bookId);
     }
 
@@ -49,16 +65,4 @@ public class UserController {
     public ReturnBookResponse returnBook(@RequestBody ReturnBookRequest returnBookRequest) {
         return bookService.returnBook(returnBookRequest);
     }
-
-    @GetMapping("/member/issues/{id}")
-    public MemberIssuedBookResponse getIssuedBooks(@PathVariable(name = "id") int memberId) {
-        return memberService.getAllIssued(memberId);
-    }
-    
-    @PutMapping("/member/password")
-    public ChangeMemberPasswordResponse changeMemberPassword(@RequestBody ChangeMemberPasswordRequest changeMemberPasswordRequest) {
-        return memberService.updatePassword(changeMemberPasswordRequest);
-    }
-
-
 }

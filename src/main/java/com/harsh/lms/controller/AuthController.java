@@ -21,6 +21,4 @@ public class AuthController {
         LoginResponse loginResponse = authService.authenticateUser(loginCredentials.getUsername(), loginCredentials.getPassword());
         return loginResponse;
     }
-
-
 }
