@@ -9,6 +9,7 @@ public class GetMemberResponse {
     private boolean status;
     private String message;
     private Integer memberId;
+    private String username;
     private String memberName;
     private Integer totalIssuedBooks;
     private List<Integer> issuedBooksIds;
@@ -35,6 +36,14 @@ public class GetMemberResponse {
 
     public void setMemberId(Integer memberId) {
         this.memberId = memberId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMemberName() {

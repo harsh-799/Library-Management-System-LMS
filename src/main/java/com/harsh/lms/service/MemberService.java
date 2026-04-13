@@ -93,6 +93,7 @@ public class MemberService {
         getMemberResponse.setStatus(true);
         getMemberResponse.setMessage("Member Found Successfully");
         getMemberResponse.setMemberId(member.getMemberId());
+        getMemberResponse.setUsername(member.getMemberCredentials().getUsername());
         getMemberResponse.setMemberName(member.getFullName());
 
         List<BookIssued> memberIssuedBooks = member.getIssuedBooks();

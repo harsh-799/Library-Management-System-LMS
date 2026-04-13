@@ -97,16 +97,6 @@ public class MemberDashboard {
 
         switch (choices){
 
-
-            case 6:
-                System.out.println("\n👤 Your Profile");
-                System.out.println("---------------------------------------");
-                System.out.println("🆔 Member ID: " + member.getMemberId());
-                System.out.println("📛 Name: " + member.getFullName());
-                System.out.println("🔑 Username: " + member.getMemberCredentials().getUsername());
-                System.out.println("📚 Books Issued: " + member.getIssuedBooks().size());
-                break;
-
             case 7:
                 System.out.println("\n🔐 Update Password");
                 System.out.print("Enter the old password: ");
