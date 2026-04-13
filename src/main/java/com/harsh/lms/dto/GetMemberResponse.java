@@ -1,7 +1,6 @@
 package com.harsh.lms.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.harsh.lms.model.BookIssued;
 
 import java.util.List;
 
@@ -11,7 +10,8 @@ public class GetMemberResponse {
     private String message;
     private Integer memberId;
     private String memberName;
-    private List<BookIssued> issuedBooks;
+    private Integer totalIssuedBooks;
+    private List<Integer> issuedBooksIds;
 
     public boolean isStatus() {
         return status;
@@ -45,11 +45,19 @@ public class GetMemberResponse {
         this.memberName = memberName;
     }
 
-    public List<BookIssued> getIssuedBooks() {
-        return issuedBooks;
+    public Integer getTotalIssuedBooks() {
+        return totalIssuedBooks;
     }
 
-    public void setIssuedBooks(List<BookIssued> issuedBooks) {
-        this.issuedBooks = issuedBooks;
+    public void setTotalIssuedBooks(Integer totalIssuedBooks) {
+        this.totalIssuedBooks = totalIssuedBooks;
+    }
+
+    public List<Integer> getIssuedBooksIds() {
+        return issuedBooksIds;
+    }
+
+    public void setIssuedBooksIds(List<Integer> issuedBooksIds) {
+        this.issuedBooksIds = issuedBooksIds;
     }
 }

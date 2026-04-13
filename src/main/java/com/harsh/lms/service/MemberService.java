@@ -3,14 +3,12 @@ package com.harsh.lms.service;
 import com.harsh.lms.dto.*;
 import com.harsh.lms.exception.BookIssuedNotFoundException;
 import com.harsh.lms.exception.IncorrectPasswordException;
-import com.harsh.lms.exception.LibraryHasNoMembersException;
 import com.harsh.lms.model.BookIssued;
 import com.harsh.lms.model.Member;
 import com.harsh.lms.model.MemberCredentials;
 import com.harsh.lms.repository.BookIssuedRepository;
 import com.harsh.lms.repository.MemberCredentialsRepository;
 import com.harsh.lms.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -96,7 +94,14 @@ public class MemberService {
         getMemberResponse.setMessage("Member Found Successfully");
         getMemberResponse.setMemberId(member.getMemberId());
         getMemberResponse.setMemberName(member.getFullName());
-        getMemberResponse.setIssuedBooks(member.getIssuedBooks());
+
+        List<BookIssued> memberIssuedBooks = member.getIssuedBooks();
+        getMemberResponse.setTotalIssuedBooks(memberIssuedBooks.size());
+
+        List<Integer> bookIssued = new ArrayList<>();
+        memberIssuedBooks.forEach(b -> bookIssued.add(b.getBook().getBookId()));
+
+        getMemberResponse.setIssuedBooksIds(bookIssued);
         return getMemberResponse;
     }
 
