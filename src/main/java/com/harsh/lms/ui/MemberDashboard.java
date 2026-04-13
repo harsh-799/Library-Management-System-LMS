@@ -97,29 +97,6 @@ public class MemberDashboard {
 
         switch (choices){
 
-            case 3:
-                System.out.println("\n📥 Issue a Book");
-
-                System.out.print("📘 Enter Book ID: ");
-                int bookId = sc.nextInt();
-
-                try {
-                    bookService.issueBook(bookId, member);
-                    System.out.println("✅ Book issued successfully!");
-
-                } catch (BookNotAvailableException e) {
-                    System.out.println("⏰ "+e.getMessage() + " 📚. Kindly wait for a return 🔄. ");
-                } catch (IssueLimitReachedException e) {
-                    System.out.println("⚠️ "+ e.getMessage() + " 📚. Only 3 allowed at once.");
-                } catch (InvalidBookException e) {
-                    System.out.println("❌ "+ e.getMessage());
-                } catch (BookAlreadyIssuedException e) {
-                    System.out.println("⚠️ "+ e.getMessage());
-                } catch (Exception e) {
-                    System.out.println("❌ Something went wrong");
-                }
-                break;
-
             case 4:
                 System.out.println("\n📤 Return a Book");
 

@@ -2,12 +2,11 @@ package com.harsh.lms.controller;
 
 import com.harsh.lms.dto.AllBooksMemberResponse;
 import com.harsh.lms.dto.GetBookMemberResponse;
+import com.harsh.lms.dto.IssueBookRequest;
+import com.harsh.lms.dto.IssueBookResponse;
 import com.harsh.lms.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +38,11 @@ public class UserController {
     @GetMapping(value = "/book/search", params = "title")
     public List<AllBooksMemberResponse> getBookByTitle(@RequestParam String title) {
         return bookService.searchBookByTitle(title);
+    }
+
+    @PostMapping("member/issue")
+    public IssueBookResponse issueBook(@RequestBody IssueBookRequest bookIssueRequest) {
+        return bookService.issueBook(bookIssueRequest);
     }
 
 

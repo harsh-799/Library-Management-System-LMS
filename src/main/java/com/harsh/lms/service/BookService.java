@@ -7,6 +7,7 @@ import com.harsh.lms.model.BookIssued;
 import com.harsh.lms.model.Member;
 import com.harsh.lms.repository.BookIssuedRepository;
 import com.harsh.lms.repository.BookRepository;
+import com.harsh.lms.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -19,17 +20,18 @@ public class BookService {
 
     private enum BookIssueStatus {
         ISSUED,
-        RETURNED,
-        INVALID
+        RETURNED
     }
 
     private final BookRepository bookRepo;
     private final BookIssuedRepository bookIssuedRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepo, BookIssuedRepository bookIssuedRepository) {
+    public BookService(BookRepository bookRepo, BookIssuedRepository bookIssuedRepository, MemberRepository memberRepository) {
         this.bookRepo = bookRepo;
         this.bookIssuedRepository = bookIssuedRepository;
+        this.memberRepository = memberRepository;
     }
 
     public GetBookMemberResponse searchBookById(int bookId){
@@ -120,32 +122,63 @@ public class BookService {
         return false;
     }
 
-    public void issueBook(int bookId, Member member){
+    public IssueBookResponse issueBook(IssueBookRequest issueBookRequest){
+
+        int memberId = issueBookRequest.getMemberId();
+        Optional<Member> memberRecords = memberRepository.findById(memberId);
+
+        if (memberRecords.isEmpty()) {
+            IssueBookResponse issueBookResponse = new IssueBookResponse();
+            issueBookResponse.setSuccess(false);
+            issueBookResponse.setMessage("Member Not Found");
+            return issueBookResponse;
+        }
+
+        Member member = memberRecords.get();
 
         if (hasReachedIssueLimit(member.getIssuedBooks())) {
-            throw new IssueLimitReachedException();
+            // throw new IssueLimitReachedException();
+            IssueBookResponse issueBookResponse = new IssueBookResponse();
+            issueBookResponse.setSuccess(false);
+            issueBookResponse.setMessage("Limit reached! You have already issued 3 book");
+            return issueBookResponse;
         }
 
-        if (bookAlreadyIssued(member.getIssuedBooks(), bookId)) {
-            throw new BookAlreadyIssuedException();
+        if (bookAlreadyIssued(member.getIssuedBooks(), issueBookRequest.getBookId())) {
+            // throw new BookAlreadyIssuedException();
+            IssueBookResponse issueBookResponse = new IssueBookResponse();
+            issueBookResponse.setSuccess(false);
+            issueBookResponse.setMessage("You have already issued this book.");
+            return issueBookResponse;
         }
 
-        Optional<Book> bookToIssue =  bookRepo.findById(bookId);
+        Optional<Book> bookRecords =  bookRepo.findById(issueBookRequest.getBookId());
+        Book book;
+
         
-        if (bookToIssue.isPresent()) {
-            int bookAvailableQty = bookToIssue.get().getAvailableQty();
+        if (bookRecords.isPresent()) {
+            book = bookRecords.get();
+            int bookAvailableQty = book.getAvailableQty();
             
             if (bookAvailableQty <= 0) {
-                throw new BookNotAvailableException();
+                // throw new BookNotAvailableException();
+                IssueBookResponse issueBookResponse = new IssueBookResponse();
+                issueBookResponse.setSuccess(false);
+                issueBookResponse.setMessage("All books are issued");
+                return issueBookResponse;
             }
         } else {
-            throw new InvalidBookException();
+            // throw new InvalidBookException();
+            IssueBookResponse issueBookResponse = new IssueBookResponse();
+            issueBookResponse.setSuccess(false);
+            issueBookResponse.setMessage("Invalid book ID");
+            return issueBookResponse;
         }
 
-        createBookIssueEntry(bookToIssue.get(), member);
+        return createBookIssueEntry(book, member);
     }
     
-    private void createBookIssueEntry(Book bookToIssue, Member member) {
+    private IssueBookResponse createBookIssueEntry(Book bookToIssue, Member member) {
 
         LocalDate todaysDate = LocalDate.now();
         LocalDate returnDate = todaysDate.plusDays(7);
@@ -159,9 +192,10 @@ public class BookService {
         List<BookIssued> currIssuedBooks = member.getIssuedBooks();
         currIssuedBooks.add(bookIssued);
         member.setIssuedBooks(currIssuedBooks);
+        memberRepository.save(member);
         bookIssuedRepository.save(bookIssued);
 
-        updateBookStock(bookToIssue, BookIssueStatus.ISSUED);
+        return updateBookStock(bookToIssue, BookIssueStatus.ISSUED);
     }
 
     public void returnBook(int bookId, Member member) {
@@ -189,18 +223,25 @@ public class BookService {
         }
     }
 
-    private void updateBookStock(Book book, BookIssueStatus status) {
+    private IssueBookResponse updateBookStock(Book book, BookIssueStatus status) {
+        IssueBookResponse issueBookResponse;
         if (status.equals(BookIssueStatus.ISSUED)) {
             book.setAvailableQty(book.getAvailableQty() - 1);
             bookRepo.save(book);
-            return;
+            issueBookResponse = new IssueBookResponse();
+            issueBookResponse.setSuccess(true);
+            issueBookResponse.setMessage("Book Issued Successfully");
+            issueBookResponse.setBookId(book.getBookId());
+            return issueBookResponse;
         } else if (status.equals(BookIssueStatus.RETURNED)) {
             book.setAvailableQty(book.getAvailableQty() + 1);
             bookRepo.save(book);
-            return;
         }
 
-        throw new InvalidBookException();
+        issueBookResponse = new IssueBookResponse();
+        issueBookResponse.setSuccess(false);
+        issueBookResponse.setMessage("Error! In Updating Book Stocks");
+        return issueBookResponse;
     }
 
     public GetBookResponse viewBookById(int bookId) {
