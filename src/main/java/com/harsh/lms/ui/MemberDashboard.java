@@ -97,19 +97,7 @@ public class MemberDashboard {
 
         switch (choices){
 
-            case 7:
-                System.out.println("\n🔐 Update Password");
-                System.out.print("Enter the old password: ");
-                String oldPassword = sc.next();
-                System.out.print("Enter the new Password: ");
-                String newPassword = sc.next();
-                try {
-                    memberService.updatePassword(member, oldPassword, newPassword);
-                    System.out.println("🔑✅ Password updated successfully!");
-                } catch (RuntimeException e) {
-                    System.out.println("❌ "+e.getMessage());
-                }
-                break;
+
 
             case 8:
                 return true;

@@ -54,6 +54,11 @@ public class UserController {
     public MemberIssuedBookResponse getIssuedBooks(@PathVariable(name = "id") int memberId) {
         return memberService.getAllIssued(memberId);
     }
+    
+    @PutMapping("/member/password")
+    public ChangeMemberPasswordResponse changeMemberPassword(@RequestBody ChangeMemberPasswordRequest changeMemberPasswordRequest) {
+        return memberService.updatePassword(changeMemberPasswordRequest);
+    }
 
 
 }

@@ -183,14 +183,43 @@ public class MemberService {
         }
     }
 
-    public void updatePassword(Member currentMember, String oldPassword, String newPassword){
+    public ChangeMemberPasswordResponse updatePassword(ChangeMemberPasswordRequest changeMemberPasswordRequest){
+
+        int memberId = changeMemberPasswordRequest.getMemberId();
+        Optional<Member> memberRecords = memberRepo.findById(memberId);
+        ChangeMemberPasswordResponse changeMemberPasswordResponse;
+
+        if (memberRecords.isEmpty()) {
+            changeMemberPasswordResponse = new ChangeMemberPasswordResponse();
+            changeMemberPasswordResponse.setSuccess(false);
+            changeMemberPasswordResponse.setMessage("No Member Found with the ID");
+            return changeMemberPasswordResponse;
+        }
+
+        Member currentMember = memberRecords.get();
+        String currentMemberOldPassword = changeMemberPasswordRequest.getOldPassword();
+        String currentMemberNewPassword = changeMemberPasswordRequest.getNewPassword();
         MemberCredentials memberCredentials = currentMember.getMemberCredentials();
 
-        if (memberCredentials.getPassword().equals(oldPassword)) {
-            memberCredentials.setPassword(newPassword);
+        if (memberCredentials.getPassword().equals(currentMemberOldPassword)) {
+
+            if (memberCredentials.getPassword().equals(currentMemberNewPassword)) {
+                changeMemberPasswordResponse = new ChangeMemberPasswordResponse();
+                changeMemberPasswordResponse.setSuccess(false);
+                changeMemberPasswordResponse.setMessage("Old and new passwords are same.");
+                return changeMemberPasswordResponse;
+            }
+
+            memberCredentials.setPassword(currentMemberNewPassword);
             memberCredentialsRepository.save(memberCredentials);
-            return;
+            changeMemberPasswordResponse = new ChangeMemberPasswordResponse();
+            changeMemberPasswordResponse.setSuccess(true);
+            changeMemberPasswordResponse.setMessage("Password Updated Successfully.");
+            return changeMemberPasswordResponse;
         }
-            throw new IncorrectPasswordException();
+        changeMemberPasswordResponse = new ChangeMemberPasswordResponse();
+        changeMemberPasswordResponse.setSuccess(false);
+        changeMemberPasswordResponse.setMessage("Password Doesn't Matches");
+        return changeMemberPasswordResponse;
     }
 }
